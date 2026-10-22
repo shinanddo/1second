@@ -5,12 +5,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
 <title>한지훈의 iPhone · 읽씹?</title>
+<link rel="stylesheet" href="https://aiuxplayground.com/kits/ios-26/v1/ios.css">
+<!-- Existing v5 UI fallback styles retained until verified kit component docs are available. -->
 <style>
 :root{--bg:#edf1f7;--ink:#16181d;--muted:#6d7480;--glass:rgba(255,255,255,.56);--line:rgba(255,255,255,.55);--shadow:0 18px 40px rgba(21,26,38,.18)}
 *{box-sizing:border-box}html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#20252e;color:var(--ink)}
 button,input,textarea{font:inherit}button{border:0;background:none;padding:0;cursor:pointer}img{display:block;max-width:100%}a{color:inherit;text-decoration:none}
 #stage{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at top left,#546173,#1f232b 56%)}
-.device{width:min(390px,100vw);height:min(844px,100dvh);border-radius:54px;overflow:hidden;position:relative;background:linear-gradient(160deg,#8aa4ba,#d9c5c4 55%,#8293b1);box-shadow:0 0 0 1px rgba(255,255,255,.12),0 0 0 7px #101216,var(--shadow)}
+.device{width:min(402px,100vw);height:min(844px,100dvh);border-radius:54px;overflow:hidden;position:relative;background:linear-gradient(160deg,#8aa4ba,#d9c5c4 55%,#8293b1);box-shadow:0 0 0 1px rgba(255,255,255,.12),0 0 0 7px #101216,var(--shadow)}
 @media (max-width:640px){#stage{padding:0}.device{width:100vw;height:100dvh;border-radius:0;box-shadow:none}}
 .wallpaper:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.45),transparent 30%),radial-gradient(circle at 85% 80%,rgba(100,126,199,.28),transparent 28%)}
 .status{position:absolute;inset:0 0 auto 0;height:54px;padding:15px 28px 0;display:flex;justify-content:space-between;align-items:flex-start;z-index:20;color:#fff;font-weight:700;font-size:14px;pointer-events:none;text-shadow:0 1px 10px rgba(0,0,0,.18)}
@@ -139,14 +141,138 @@ button,input,textarea{font:inherit}button{border:0;background:none;padding:0;cur
 @media(max-width:640px){.device{border:0}.status{padding-top:max(15px,env(safe-area-inset-top))}.homebar{bottom:max(9px,env(safe-area-inset-bottom))}}
 @media(max-height:690px){.widgets .widget{min-height:96px}.home{padding-top:65px}.appicon{width:49px;height:49px}.dock .appicon{width:49px;height:49px}.grid{gap:9px 5px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.incoming{position:absolute;z-index:80;top:60px;left:12px;right:12px;width:calc(100% - 24px);border-radius:22px;padding:12px;display:flex;gap:11px;align-items:flex-start;text-align:left;color:#222832;box-shadow:0 14px 35px #12192444;animation:incomingDrop .5s cubic-bezier(.18,.8,.2,1) both;}
+.incoming img{width:41px;height:41px;border-radius:11px;object-fit:cover;flex:none}
+.incomingText{display:flex;flex-direction:column;gap:3px;flex:1;font-size:14px;line-height:1.32}
+.incomingTop{display:flex;justify-content:space-between;color:#666c76;font-size:12px}
+.incomingText strong{font-size:14px}.incomingText>span:last-child{font-size:14px}
+@keyframes incomingDrop{from{opacity:0;transform:translateY(-84px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media (prefers-reduced-motion:reduce){.incoming{animation:none}}
+
+/* iOS 26 kit system components: original classes and attributes preserved. */
+.screen > .ios-island{position:absolute;z-index:70;top:9px;left:50%;transform:translateX(-50%)}
+.screen > .ios-statusbar{position:absolute;z-index:69;top:0;left:0;right:0;pointer-events:none}
+.screen > .ios-home-indicator{position:absolute;z-index:91;bottom:0;left:0;right:0;cursor:pointer}
+.screen .homebar{display:none!important}
+
+/* Layout integration only. Kit component styling remains in external ios.css. */
+.ios-surface{position:relative;width:100%;height:100%;overflow:hidden}
+.screen .ios-navbar{flex:0 0 auto;position:relative;z-index:5;margin:0;padding:0 12px;background:transparent}
+.screen .ios-navbar__bar{min-height:54px}
+.screen .ios-navbar__large-title{margin:0;padding:2px 6px 12px;font-size:30px}
+.screen .app>.ios-navbar+.content{flex:1;min-height:0;overflow-y:auto}
+.screen .app>.ios-navbar{margin-top:0}
+.screen .ios-list{width:100%;}
+.screen .ios-list__section{margin-bottom:16px}
+.screen .ios-list__group .ios-row{width:100%;display:flex;text-decoration:none;color:inherit;text-align:left}
+.screen .ios-row__body{flex:1;display:flex;align-items:center;gap:12px;min-width:0}
+.screen .ios-row__title{flex:1;min-width:0}
+.screen .ios-row__detail{flex-shrink:0;font-size:12px}
+.screen .ios-tabbar{position:absolute;bottom:26px;left:12px;right:12px;z-index:15}
+.screen .app.has-ios-tabbar>.content{padding-bottom:108px}
+.screen .app.has-ios-tabbar>.ios-list{padding-bottom:108px}
+.screen .ios-notification-banner{position:absolute;top:52px;left:12px;right:12px;z-index:85;animation:incomingDrop .45s both;cursor:pointer}
+.screen .ios-notification-list{position:relative;z-index:3;width:100%;margin-top:24px}
+.screen .ios-notification__icon img{width:36px;height:36px;border-radius:10px;object-fit:cover}
+.screen .ios-notification__body{min-width:0}
+.screen .ios-notification{cursor:pointer}
+.screen .ios-navbar button{cursor:pointer}
+@media(max-width:640px){.ios-surface{width:100%}}
+
+
+/* v8: iOS Kit classes used unchanged; only layout and application skin adapted. */
+.home .glass,.home .widget,.home .dock{background:transparent;border:0;box-shadow:none}
+.home .widget.ios-glass,.home .dock.ios-glass{border-radius:29px}
+.home .grid .appbtn{position:relative}
+.home .appbtn>.ios-badge{position:absolute;right:3px;top:-5px;z-index:2}
+.ios-search{width:100%;display:flex;align-items:center;gap:10px}
+.ios-search input{flex:1;min-width:0;background:transparent;border:0;outline:none}
+.search-frame{padding:12px 16px;background:transparent}
+.search-frame .ios-search{min-height:42px}
+.katok{height:100%;background:#fff;display:flex;flex-direction:column;color:#191919}
+.katok .kk-top{display:flex;align-items:center;padding:6px 15px 10px;gap:12px;min-height:62px;background:#fff}
+.katok .kk-top button{font-size:23px;color:#252525}
+.katok .kk-top h2{margin:0;font-weight:750;font-size:26px;flex:1}
+.katok .kk-top .kk-add{font-size:24px}
+.katok .kk-list{flex:1;min-height:0;overflow:auto}
+.katok .kk-room{display:flex;gap:12px;padding:13px 17px;align-items:center;width:100%;text-align:left;min-width:0;background:#fff}
+.katok .kk-room .kk-avatar{width:54px;height:54px;border-radius:19px;overflow:hidden;flex:0 0 auto;background:#eee}
+.katok .kk-avatar img{height:100%;width:100%;object-fit:cover}
+.katok .kk-room .kk-preview{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:#878787;margin-top:6px}
+.katok .kk-room .kk-n{font-size:16px;font-weight:650}
+.katok .kk-room .kk-time{font-size:11px;color:#999;white-space:nowrap}
+.katok .kk-room .ios-badge{margin:7px 0 0 auto;display:table}
+.katok .kk-bottom{height:65px;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;background:#fff;flex:0 0 auto;margin-bottom:18px}
+.katok .kk-bottom button{display:grid;gap:3px;place-items:center;font-size:11px;color:#888}
+.katok .kk-bottom button.active{color:#181818;font-weight:700}
+.katok .kk-bottom .ios-icon{--w:23px;--h:23px}
+.katok .kk-chat{height:100%;display:flex;flex-direction:column;background:#abc1d1;color:#191919}
+.katok .kk-chat-head{min-height:60px;padding:8px 13px;display:flex;align-items:center;gap:11px;background:transparent}
+.katok .kk-chat-head button{flex:0 0 auto;display:grid;place-items:center;min-width:37px;height:38px;border-radius:15px}
+.katok .kk-chat-head .kk-chat-name{flex:1;font-size:17px;font-weight:750}
+.katok .kk-chat-head .ios-glass{border-radius:17px}
+.katok .kk-chat-feed{min-height:0;overflow-y:auto;flex:1;padding:12px 17px 28px}
+.katok .kk-day{font-size:11px;color:#fefefe;background:#7c94a4;border-radius:999px;padding:6px 12px;width:max-content;margin:8px auto 24px}
+.katok .kk-msg{display:flex;align-items:flex-end;gap:6px;margin:7px 0;max-width:100%}
+.katok .kk-msg.outgoing{flex-direction:row-reverse}
+.katok .kk-bubble{position:relative;white-space:pre-wrap;line-height:1.46;font-size:15px;max-width:73%;border-radius:13px;padding:10px 12px;background:#fff;color:#191919;box-shadow:0 1px 2px #17252a16}
+.katok .kk-msg.outgoing .kk-bubble{background:#fee500}
+.katok .kk-bubble[data-tail]::before{content:'';position:absolute;top:2px;left:-5px;width:10px;height:9px;background:inherit;clip-path:polygon(100% 0,0 0,100% 100%)}
+.katok .kk-msg.outgoing .kk-bubble[data-tail]::before{left:auto;right:-5px;transform:scaleX(-1)}
+.katok .kk-meta{font-size:10px;color:#566b79;white-space:nowrap;margin-bottom:2px}
+.katok .kk-compose{display:flex;align-items:center;gap:7px;padding:10px 12px 22px;background:#f7f8f9}
+.katok .kk-compose input{flex:1;min-width:0;background:#fff;border:1px solid #e5e7eb;height:39px;border-radius:18px;padding:0 12px;font-size:14px}
+.katok .kk-compose button{border:0;font-size:23px;color:#777}
+.katok .kk-compose .kk-send{background:#fee500;color:#191919;height:35px;width:38px;border-radius:13px;font-size:19px}
+.ios-surface .ios-messages{overflow:auto;min-height:0;padding:16px;display:flex;flex-direction:column;gap:6px}
+.ios-surface .ios-compose{flex:0 0 auto;margin-bottom:35px}
+.ios-surface .ios-compose__field{flex:1}
+.ios-surface .ios-compose__field input{min-width:0;flex:1;border:0;background:transparent}
+.ios-surface .ios-compose button{cursor:pointer}
+.msg-app{height:100%;display:flex;flex-direction:column;background:#fff;padding-top:54px}
+.msg-app .ios-navbar{flex:0 0 auto}
+.msg-app .msg-content{flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto}
+.msg-app .msg-content .ios-list{padding:12px 0}
+.msg-app .msg-content .ios-row{width:100%;text-align:left}
+.ios-surface .ios-notification-banner{z-index:95}
+
+
+/* v9: application placement for unmodified iOS 26 kit components */
+.ios-surface{position:relative}
+.home .widgets{grid-template-columns:1fr 1fr;gap:12px}
+.home .widgets .ios-widget{min-width:0;width:100%;height:138px}
+.home .widgets .ios-widget__card{height:100%;min-height:0;padding:12px 13px;border-radius:25px}
+.home .widgets .ios-widget__big{font-size:32px;line-height:1.13;margin-top:6px}
+.home .widgets .ios-widget__eyebrow{font-size:12px}
+.home .widgets .ios-widget__card small{font-size:11px}
+.ios-accessory.music-mini{position:absolute;bottom:108px;left:9px;right:9px;margin:0!important;z-index:18}
+.music-mini .ios-accessory__art{background-size:cover!important;background-position:center!important}
+.ios-keyboard.keyboard-overlay{position:absolute;bottom:18px;left:0;right:0;z-index:60;box-shadow:0 -12px 34px #1112}
+.ios-surface.keyboard-open .kk-compose,.ios-surface.keyboard-open .ios-compose{position:relative;z-index:61}
+.ios-surface.keyboard-open .kk-chat-feed{padding-bottom:12px}
+.ios-surface.keyboard-open .katok .kk-compose{margin-bottom:270px}
+.ios-surface.keyboard-open .msg-app .ios-compose{margin-bottom:270px}
+.ios-surface.keyboard-open .ios-home-indicator{z-index:65}
+.ios-surface .ios-segmented{width:100%}
+.photoViewer .viewerTop{gap:10px}
+.photoViewer .viewerTop a{color:white}
+.photoViewer .photo-action-strip{display:flex;justify-content:space-around;padding:12px 15px 24px;align-items:center}
+.photoViewer .photo-action-strip>a,.photoViewer .photo-action-strip>button{color:white;display:grid;place-items:center;width:40px;height:40px;background:#ffffff22;border-radius:18px}
+.ios-layer{z-index:90}
+.ios-sheet__body{overflow:auto}
+#share .ios-share__thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.ios-surface .ios-actionsheet{max-width:100%}
+.ios-surface .ios-layer .ios-list{padding:4px 0}
+
 </style>
 </head>
 <body>
-<div id="stage"><div class="device wallpaper"><div class="island"></div><div class="status"><div>9:41</div><div class="sys"><span>●●●●</span><span>5G</span><span>🔋</span></div></div><div id="screen" class="screen"></div></div></div>
+<div id="stage"><div class="device wallpaper ios-surface"><div id="screen" class="screen"></div></div></div>
 <script>
 const PHOTOS=['001.jpg', '002.jpg', '003.jpg', '004.jpg', '005.jpg', '006.jpg', '007.jpg', '008.jpg', '009.jpg', '010.jpg', '011.jpg', '012.jpg', '013.jpg', 'weverse_1-297390107.jpg', 'weverse_1-298105017.jpg', 'weverse_1-298105018.jpg', 'weverse_3-336639365.jpg', 'weverse_3-339099838.jpg', 'weverse_4-328094447.jpg'];
-const ICONS={ phone:'assets/icons/ios26_phone.png', kakao:'assets/icons/icon_kakao.png', photos:'assets/icons/icon_photos.svg', ai:'assets/icons/icon_chatgpt.png', instagram:'assets/icons/icon_instagram.png', x:'assets/icons/ios26_x.png', weverse:'assets/icons/icon_weverse.png', music:'assets/icons/ios26_music.png', calendar:'assets/icons/ios26_calendar.png', notes:'assets/icons/ios26_notes.png', safari:'assets/icons/ios26_safari.png', camera:'assets/icons/ios26_camera.png', settings:'assets/icons/icon_settings.svg', messages:'assets/icons/ios26_messages.png' };
-const state={view:'lock', pin:'', app:null, detail:null, photoIndex:null, weverseTab:'artist', xTab:'search', oldChat:false, aiThread:null, toast:null};
+const ICONS={ phone:'assets/icons/ios26_phone.png', kakao:'assets/icons/icon_kakao.png', photos:'assets/icons/ios26_photos.png', ai:'assets/icons/icon_chatgpt.png', instagram:'assets/icons/icon_instagram.png', x:'assets/icons/ios26_x.png', weverse:'assets/icons/icon_weverse.png', music:'assets/icons/ios26_music.png', calendar:'assets/icons/ios26_calendar.png', notes:'assets/icons/ios26_notes.png', safari:'assets/icons/ios26_safari.png', camera:'assets/icons/ios26_camera.png', settings:'assets/icons/icon_settings.svg', messages:'assets/icons/ios26_messages.png' };
+const state={phoneTab:'all',photosTab:'library',musicTab:'playlist',incoming:false, notificationSent:false, notificationRead:false,view:'lock', pin:'', app:null, detail:null, photoIndex:null, weverseTab:'artist', xTab:'search', oldChat:false, aiThread:null, toast:null};
 const calls=[
   ['신신신정환','오늘 오전 9:18','부재중'],['엄마','어제 오후 8:42','발신'],['누나','어제 오후 6:03','수신'],['010-3114-1106','어제 오후 4:17','부재중'],['누나','그제 오후 11:20','수신'],['엄마','그제 오후 7:55','발신'],['신신신정환','그제 오후 2:34','수신'],['070-3827-1003','10월 16일','부재중']
 ];
@@ -192,40 +318,157 @@ const playlist=[
 ];
 function q(sel){return document.querySelector(sel)}
 function showToast(msg){state.toast=msg; render(); if(msg) setTimeout(()=>{if(state.toast===msg){state.toast=null; render();}},2800);}
-function openApp(id){state.view='app'; state.app=id; state.detail=null; state.photoIndex=null; if(id==='weverse') state.weverseTab='artist'; if(id==='x') state.xTab='search'; render();}
-function goHome(){state.view='home'; state.app=null; state.detail=null; state.photoIndex=null; render();}
+function openApp(id){hideKeyboard();state.view='app'; state.app=id; state.detail=null; state.photoIndex=null; if(id==='weverse') state.weverseTab='artist'; if(id==='x') state.xTab='search'; render();}
+function goHome(){hideKeyboard();state.view='home'; state.app=null; state.detail=null; state.photoIndex=null; render();}
 function openChat(name){state.detail=name; render();}
 function openPhoto(i){state.photoIndex=i; render();}
 function openAIThread(i){state.aiThread=i; render();}
 function switchWeverse(tab){state.weverseTab=tab; render();}
 function switchX(tab){state.xTab=tab; render();}
 function contactDetail(i){state.detail='call'+i; render();}
-function lockHTML(){return `<div class="lock"><div class="date">10월 22일 목요일</div><div class="time">9:41</div><div class="notice glass"><img src="${ICONS.kakao}" alt="kakao"><div><div class="meta">신신신정환 · 지금</div><div style="font-weight:700;margin-bottom:4px">지훈아 수업 끝났냐</div><div style="font-size:14px;color:#4d5663">오늘은 읽씹하지 마셈 ㅋㅋ</div></div></div><button class="unlocktip" style="color:inherit;background:transparent" onclick="beginUnlock()">위로 쓸어올려 잠금 해제  ⌃</button><div class="actions"><button class="circlebtn">🔦</button><button class="circlebtn">📷</button></div></div><div class="homebar light"></div>`}
+function lockHTML(){return `<div class="lock"><div class="date">10월 22일 목요일</div><div class="time">9:41</div><div class="ios-notification-list" onclick="beginUnlock()"><div class="ios-notification"><span class="ios-notification__icon"><img src="${ICONS.kakao}" alt="카카오톡"></span><div class="ios-notification__body"><div class="ios-notification__head"><span class="ios-notification__title">신신신정환</span><span class="ios-notification__time">지금</span></div><p class="ios-notification__text">지훈아 수업 끝났냐<br>오늘은 읽씹하지 마셈 ㅋㅋ</p></div></div></div><button class="unlocktip" style="color:inherit;background:transparent" onclick="beginUnlock()">위로 쓸어올려 잠금 해제  ⌃</button><div class="actions"><button class="circlebtn">🔦</button><button class="circlebtn">📷</button></div></div><div class="homebar light"></div>`}
 function beginUnlock(){state.view='passcode';state.pin='';state.toast=null;render();}
-function pressPin(n){if(state.pin.length>=4)return;state.pin+=String(n);if(state.pin.length===4){if(state.pin==='1107'){state.view='home';state.pin='';state.toast=null;render();}else{state.pin='';render();const e=q('.pinError');if(e)e.textContent='암호가 올바르지 않습니다';}}else render();}
+function pressPin(n){if(state.pin.length>=4)return;state.pin+=String(n);if(state.pin.length===4){if(state.pin==='1107'){state.view='home';state.pin='';state.toast=null;render();scheduleKakaoNotification();}else{state.pin='';render();const e=q('.pinError');if(e)e.textContent='암호가 올바르지 않습니다';}}else render();}
+function scheduleKakaoNotification(){
+  // The message is a fictional local event, not a real KakaoTalk push notification.
+  if(state.notificationSent) return;
+  state.notificationSent=true;
+  setTimeout(()=>{
+    if(state.view==='lock'||state.view==='passcode')return;
+    state.incoming=true;
+    render();
+    // Use a subtle synthesized chime only after user has interacted with unlock.
+    try {const Ctx=window.AudioContext||window.webkitAudioContext; if(Ctx){const c=new Ctx(); const o=c.createOscillator(), g=c.createGain();o.type='sine';o.frequency.setValueAtTime(840,c.currentTime);o.frequency.exponentialRampToValueAtTime(620,c.currentTime+.16);g.gain.setValueAtTime(.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(.035,c.currentTime+.018);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.26);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.27);o.onended=()=>c.close();}}catch(_e){}
+    setTimeout(()=>{if(state.incoming){state.incoming=false;render();}},7000);
+  },1400);
+}
+function openIncomingKakao(){state.incoming=false;state.notificationRead=true;state.oldChat=false;state.view='app';state.app='kakao';state.detail='신신신정환';render();}
+function incomingHTML(){return `<div class="ios-notification-banner" onclick="openIncomingKakao()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openIncomingKakao()" aria-label="신신신정환 카카오톡 알림 열기"><div class="ios-notification"><span class="ios-notification__icon"><img src="${ICONS.kakao}" alt="카카오톡"></span><div class="ios-notification__body"><div class="ios-notification__head"><span class="ios-notification__title">신신신정환</span><span class="ios-notification__time">지금</span></div><div class="ios-notification__subtitle">카카오톡</div><p class="ios-notification__text">야 한지훈<br>전화 좀 받아 ㅋㅋ</p></div></div></div>`}
 function pinHTML(){return `<div class="pinScreen"><div class="pinTitle">암호 입력</div><div class="pinDots">${[0,1,2,3].map(i=>`<span class="${state.pin.length>i?'filled':''}"></span>`).join('')}</div><div class="pinError"></div><div class="pinGrid">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(n=>n===''?'<span></span>':`<button onclick="${n==='⌫'?"state.pin=state.pin.slice(0,-1);render()":`pressPin(${n})`}">${n}</button>`).join('')}</div><button class="pinCancel" onclick="state.view='lock';render()">취소</button></div><div class="homebar light"></div>`;}
-function safariHTML(){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>Safari</h1><button class="close" onclick="goHome()">×</button></div><div class="content safariHistory"><div class="safariSearch">⌕ 검색 또는 웹 사이트 이름 입력</div><h2>최근 검색 기록</h2>${['원세컨드 신유','신정환','성지유'].map((x,i)=>`<div class="historyRow"><span class="historyIcon">◷</span><span>${i+1}. ${x}</span><span class="historyArrow">↗</span></div>`).join('')}</div>`);}
+function safariHTML(){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>Safari</h1><button class="close" onclick="goHome()">×</button></div><div class="content safariHistory"><div class="search-frame"><label class="ios-search" data-variant="filled"><i class="ios-icon ios-icon--search"></i><input type="search" placeholder="검색 또는 웹 사이트 이름 입력" aria-label="Safari 검색"></label></div><h2>최근 검색 기록</h2>${['원세컨드 신유','신정환','성지유'].map((x,i)=>`<div class="historyRow"><span class="historyIcon">◷</span><span>${i+1}. ${x}</span><span class="historyArrow">↗</span></div>`).join('')}</div>`);}
 const diaryEntries=[{title:'다섯 번째 일기',pages:['assets/diary1.jpg']},{title:'일곱 번째 일기 : 옛날 이야기',pages:['assets/diary2.jpg','assets/diary3.jpg']},{title:'여섯 번째 일기',pages:['assets/diary4.jpg']}];
 function notesHTML(){if(state.detail!==null){const d=diaryEntries[state.detail];return shell(`<div class="notesDetail"><div class="notesToolbar"><button onclick="state.detail=null;render()">‹ 메모</button><span>↶　↷　♧　···</span></div><div class="notesScroll"><h1>${d.title}</h1>${d.pages.map((src,i)=>`<img class="diaryPage" src="${src}" alt="${d.title} ${i+1}페이지 원문">`).join('')}</div><div class="notesBottom">☷　　　　▣　　　　◉　　　　□</div></div>`);}return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>메모</h1><button class="close" onclick="goHome()">×</button></div><div class="content notesList"><h2>모든 메모</h2>${diaryEntries.map((d,i)=>`<button class="noteRow" onclick="state.detail=${i};render()"><b>${d.title}</b><small>일기 · ${d.pages.length}페이지</small></button>`).join('')}</div>`);}
-function appButton(id,label,badge=''){return `<button class="appbtn" onclick="openApp('${id}')"><div class="appicon"><img src="${ICONS[id]}" alt=""></div><div style="position:relative">${label}${badge?`<span class="badge">${badge}</span>`:''}</div></button>`;}
-function homeHTML(){return `<div class="home"><div class="widgets"><div class="widget glass"><div class="tiny">오늘 일정</div><div class="big">3</div><div class="sub">전공 수업 · 연습 · 저녁 약속</div></div><div class="widget glass"><div class="tiny">최근 재생</div><div style="font-size:18px;font-weight:700">One More Second</div><div class="sub">1SECOND · 애플뮤직 플레이리스트</div></div></div><div class="grid">${appButton('kakao','카카오톡','1')}${appButton('photos','사진')}${appButton('ai','ChatGPT')}${appButton('instagram','Instagram')}${appButton('x','X')}${appButton('weverse','Weverse')}${appButton('music','음악')}${appButton('calendar','캘린더')}</div><div class="pages"><span></span><span></span></div><div class="dock glass">${appButton('phone','전화')}${appButton('safari','Safari')}${appButton('notes','메모')}${appButton('camera','카메라')}</div></div><div class="homebar"></div>`;}
+function appButton(id,label,badge=''){return `<button class="appbtn" onclick="openApp('${id}')"><div class="appicon"><img src="${ICONS[id]}" alt=""></div><div>${label}</div>${badge?`<span class="ios-badge">${badge}</span>`:''}</button>`;}
+function homeHTML(){return `<div class="home"><div class="widgets"><div class="ios-widget" data-size="small" data-glass data-standalone><div class="ios-widget__card"><div class="ios-widget__eyebrow" style="color:#d13b40">오늘 일정</div><div class="ios-widget__big">3</div><small>전공 수업</small><small>연습 · 저녁 약속</small></div></div><div class="ios-widget" data-size="small" data-glass data-standalone onclick="openApp('music')" role="button" tabindex="0"><div class="ios-widget__card"><div class="ios-widget__eyebrow" style="color:#f04467">최근 재생</div><img src="assets/music/one_more_second.svg" alt="One More Second" style="width:49px;height:49px;border-radius:11px;margin-top:7px"><div style="font-size:12px;font-weight:700;margin-top:5px">One More Second</div><small>1SECOND</small></div></div></div><div class="grid">${appButton('kakao','카카오톡','1')}${appButton('photos','사진')}${appButton('ai','ChatGPT')}${appButton('instagram','Instagram')}${appButton('x','X')}${appButton('weverse','Weverse')}${appButton('music','음악')}${appButton('calendar','캘린더')}${appButton('messages','메시지')}</div><div class="pages"><span></span><span></span></div><div class="dock ios-glass">${appButton('phone','전화')}${appButton('safari','Safari')}${appButton('notes','메모')}${appButton('camera','카메라')}</div></div><div class="homebar"></div>`;}
 function shell(inner, light=false){return `<div class="app">${inner}</div><div class="homebar ${light?'light':''}" onclick="goHome()"></div>`}
-function phoneHTML(){ if(typeof state.detail==='string' && state.detail.startsWith('call')){ const i=Number(state.detail.slice(4)); const c=calls[i]; const isJh = c[0]==='신신신정환'; return shell(`<div class="topnav"><button class="back" onclick="state.detail=null;render()">‹ 최근 통화</button><h1>연락처</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="profilehero"><div class="avatar"><img src="${isJh?'assets/photos/009.jpg':'assets/photos/012.jpg'}"></div><div class="name">${c[0]}</div><div class="phoneNo">번호 비공개</div><div class="contactchips"><div class="chip">영상통화</div><div class="chip">메시지</div><div class="chip">공유</div></div></div><div class="sectiontitle">메모</div><div class="list"><div class="row"><div><div class="title">관계</div><div class="meta">${isJh?'저장명 바뀐 흔적 있음 · 원래는 신정환':'가족'} </div></div></div><div class="row"><div><div class="title">이스터 에그</div><div class="meta">${isJh?'말하지 않아도 다 아는 사람':'늘 저녁 챙겨먹으라고 하는 사람'} </div></div></div></div></div>`,false)} return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>전화</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="seg"><button class="active">최근 통화</button><button>부재중</button></div><div class="list">${calls.map((c,i)=>`<button class="row" onclick="contactDetail(${i})"><div><div class="title">${c[0]}</div><div class="meta">${c[2]}</div></div><div class="meta">${c[1]}</div></button>`).join('')}</div></div>`)}
-function kakaoHTML(){ if(state.detail==='신신신정환'){ const msgs=(state.oldChat?kakaoPast:kakaoCurrent); return shell(`<div class="chatview"><div class="chatheader"><button class="back" onclick="state.detail=null;render()" style="color:#0a84ff;font-size:18px">‹</button><div class="avatar"><img src="assets/photos/009.jpg"></div><div style="font-weight:700">신신신정환</div><div style="margin-left:auto"><button onclick="state.oldChat=!state.oldChat;render()" style="font-size:13px;color:#0a84ff">${state.oldChat?'현재 대화 보기':'과거 대화 보기'}</button></div></div><div class="messages">${msgs.map(m=>m[0]==='day'?`<div class="daymark">${m[1]}</div>`:`<div class="bubble ${m[0]==='me'?'me':'other'}">${m[1]}</div>`).join('')}</div><div class="chatinput"><div class="field">메시지 보내기</div></div></div>`,false)} return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>카카오톡</h1><button class="close" onclick="goHome()">×</button></div><div class="content chatlist">${kakaoRooms.map(r=>`<button class="row" onclick="openChat('${r.name}')"><div style="display:flex;align-items:center;min-width:0;flex:1"><div class="thumb"><img src="${r.avatar}"></div><div class="txt"><div class="name">${r.name}</div><div class="preview">${r.preview}</div></div></div><div class="right"><div>${r.time}</div>${r.badge?`<div class="badge" style="position:static;margin-left:auto;margin-top:7px;width:max-content">${r.badge}</div>`:''}</div></button>`).join('')}</div>`)}
-function photosHTML(){ if(state.photoIndex!==null){ const fn=PHOTOS[state.photoIndex]; const cap = fn.includes('weverse')?'위버스에 올라온 사진 저장본':'최근 항목'; return `<div class="photoViewer"><div class="viewerTop"><button class="back" onclick="state.photoIndex=null;render()" style="color:#fff">완료</button><div>${state.photoIndex+1} / ${PHOTOS.length}</div><div></div></div><div class="stage"><img src="assets/photos/${fn}"></div><div class="cap">${cap}${fn==='010.jpg'?' · 이전에 삭제했다가 다시 복구한 사진':''}</div><div class="homebar light" onclick="goHome()"></div></div>`; } return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>사진</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="seg"><button class="active">최근 항목</button><button>즐겨찾기</button><button>최근 삭제된 항목</button></div><div class="photogrid">${PHOTOS.map((p,i)=>`<button onclick="openPhoto(${i})"><img src="assets/photos/${p}"></button>`).join('')}</div></div>`)}
+function phoneHTML(){ if(typeof state.detail==='string' && state.detail.startsWith('call')){ const i=Number(state.detail.slice(4)); const c=calls[i]; const isJh = c[0]==='신신신정환'; return shell(`<div class="topnav"><button class="back" onclick="state.detail=null;render()">‹ 최근 통화</button><h1>연락처</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="profilehero"><div class="avatar"><img src="${isJh?'assets/photos/009.jpg':'assets/photos/012.jpg'}"></div><div class="name">${c[0]}</div><div class="phoneNo">번호 비공개</div><div class="contactchips"><div class="chip">영상통화</div><div class="chip">메시지</div><div class="chip">공유</div></div></div><div class="sectiontitle">메모</div><div class="list"><div class="row"><div><div class="title">관계</div><div class="meta">${isJh?'저장명 바뀐 흔적 있음 · 원래는 신정환':'가족'} </div></div></div><div class="row"><div><div class="title">이스터 에그</div><div class="meta">${isJh?'말하지 않아도 다 아는 사람':'늘 저녁 챙겨먹으라고 하는 사람'} </div></div></div></div></div>`,false)} return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>전화</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div style="padding:12px 16px"><div class="ios-segmented" style="--n:2" role="radiogroup" aria-label="통화 목록"><label><input type="radio" name="phone-filter" ${state.callFilter!=='missed'?'checked':''} onchange="state.callFilter='all';render()">최근 통화</label><label><input type="radio" name="phone-filter" ${state.callFilter==='missed'?'checked':''} onchange="state.callFilter='missed';render()">부재중</label></div></div><div class="list">${calls.map((c,i)=>`<button class="row" onclick="contactDetail(${i})"><div><div class="title">${c[0]}</div><div class="meta">${c[2]}</div></div><div class="meta">${c[1]}</div></button>`).join('')}</div></div>`)}
+function kkSafe(text){return String(text).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');}
+function kkBubble(m,i,arr){if(m[0]==='day')return `<div class="kk-day">${kkSafe(m[1])}</div>`;const sent=m[0]==='me';const tail=i===0||arr[i-1][0]!==m[0];const time=sent?'오후 2:16':'오후 2:15';return `<div class="kk-msg ${sent?'outgoing':'incoming'}"><div class="kk-bubble" ${tail?'data-tail':''}>${kkSafe(m[1])}</div><span class="kk-meta">${time}</span></div>`}
+function kkSend(){const el=document.getElementById('kk-input');if(!el||!el.value.trim())return;state.kkDrafts=state.kkDrafts||[];state.kkDrafts.push(['me',el.value.trim()]);el.value='';render();const feed=document.querySelector('.kk-chat-feed');if(feed)feed.scrollTop=feed.scrollHeight;}
+function kakaoHTML(){
+ if(state.detail==='신신신정환'){
+  const msgs=state.oldChat?kakaoPast:kakaoCurrent.concat(state.notificationSent&&!state.oldChat?[['other','야 한지훈'],['other','전화 좀 받아 ㅋㅋ']]:[],state.kkDrafts||[]);
+  return `<div class="katok kk-chat"><div class="kk-chat-head"><button class="ios-glass" onclick="state.detail=null;render()" aria-label="대화 목록"><i class="ios-icon ios-icon--chevron-left"></i></button><div class="kk-chat-name">신신신정환</div><button class="ios-glass" onclick="state.oldChat=!state.oldChat;render()" aria-label="과거 대화 보기" title="${state.oldChat?'현재 대화':'과거 읽씹? 대화'}"><i class="ios-icon ios-icon--timer"></i></button><button class="ios-glass" onclick="goHome()" aria-label="홈으로"><i class="ios-icon ios-icon--home"></i></button></div><div class="kk-chat-feed">${msgs.map(kkBubble).join('')}</div><div class="kk-compose"><button aria-label="첨부" onclick="showToast('사진 첨부는 다음 버전에 추가할게')">＋</button><input id="kk-input" onfocus="showKeyboard('kk-input')" aria-label="카카오톡 메시지" placeholder="메시지 입력" onkeydown="if(event.key==='Enter')kkSend()"><button class="kk-send" onclick="kkSend()" aria-label="전송">↑</button></div></div>`;
+ }
+ return `<div class="katok"><div class="kk-top"><button onclick="goHome()" aria-label="홈으로"><i class="ios-icon ios-icon--chevron-left"></i></button><h2>채팅</h2><button class="kk-add" onclick="showToast('새 채팅은 아직 추가되지 않았어')" aria-label="새 채팅"><i class="ios-icon ios-icon--plus"></i></button></div><div class="search-frame"><label class="ios-search" data-variant="filled"><i class="ios-icon ios-icon--search"></i><input type="search" placeholder="채팅방, 메시지 검색" aria-label="채팅 검색" oninput="filterKakao(this.value)"></label></div><div class="kk-list" id="kk-list">${kakaoRooms.map(r=>`<button class="kk-room" data-kkname="${kkSafe(r.name)}" onclick="openChat('${r.name}')"><div class="kk-avatar"><img src="${r.avatar}" alt=""></div><div style="min-width:0;flex:1"><div class="kk-n">${kkSafe(r.name)}</div><div class="kk-preview">${kkSafe(r.preview)}</div></div><div style="align-self:flex-start;text-align:right"><div class="kk-time">${r.time}</div>${r.badge?`<span class="ios-badge" data-size="sm">${r.badge}</span>`:''}</div></button>`).join('')}</div><div class="kk-bottom"><button class="active"><i class="ios-icon ios-icon--mail-open"></i>채팅</button><button onclick="showToast('친구 목록은 다음 버전에')"><i class="ios-icon ios-icon--user"></i>친구</button><button onclick="showToast('더보기는 다음 버전에')"><i class="ios-icon ios-icon--ellipsis"></i>더보기</button></div></div>`;
+}
+function filterKakao(term){document.querySelectorAll('[data-kkname]').forEach(x=>{x.style.display=x.dataset.kkname.includes(term)?'':'none'})}
+
+function photosHTML(){ if(state.photoIndex!==null){ const fn=PHOTOS[state.photoIndex]; const cap = fn.includes('weverse')?'위버스에 올라온 사진 저장본':'최근 항목'; return `<div class="photoViewer"><div class="viewerTop"><button class="back" onclick="state.photoIndex=null;render()" style="color:#fff">완료</button><div>${state.photoIndex+1} / ${PHOTOS.length}</div><div></div></div><div class="stage"><img src="assets/photos/${fn}"></div><div class="cap">${cap}${fn==='010.jpg'?' · 이전에 삭제했다가 다시 복구한 사진':''}</div><div class="photo-action-strip"><a href="#share" aria-label="사진 공유"><i class="ios-icon ios-icon--share"></i></a><a href="#sheet-m" aria-label="사진 정보"><i class="ios-icon ios-icon--image"></i></a><a href="#as-a" aria-label="사진 옵션"><i class="ios-icon ios-icon--ellipsis"></i></a></div><div class="homebar light" onclick="goHome()"></div></div>`; } return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>사진</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div style="padding:12px 16px"><div class="ios-segmented" data-size="sm" style="--n:3" role="radiogroup" aria-label="사진 분류"><label><input type="radio" name="photo-seg" ${state.photoFilter==='favorites'?'':'checked'} onchange="state.photoFilter='recent';render()">최근 항목</label><label><input type="radio" name="photo-seg" ${state.photoFilter==='favorites'?'checked':''} onchange="state.photoFilter='favorites';render()">즐겨찾기</label><label><input type="radio" name="photo-seg" onchange="showToast('복구한 사진은 최근 항목에서 확인해')">최근 삭제됨</label></div></div><div class="photogrid">${PHOTOS.map((p,i)=>`<button onclick="openPhoto(${i})"><img src="assets/photos/${p}"></button>`).join('')}</div></div>`)}
 function aiHTML(){ if(state.aiThread!==null){ const t=aiThreads[state.aiThread]; return shell(`<div class="topnav"><button class="back" onclick="state.aiThread=null;render()">‹ 챗 목록</button><h1>친도</h1><button class="close" onclick="goHome()">×</button></div><div class="aichat"><div class="aiMessages">${t.messages.map(m=>`<div class="msg ${m[0]}"><div class="dot">${m[0]==='bot'?'◎':'🙂'}</div><div class="box">${m[1]}</div></div>`).join('')}</div><div class="aiComposer"><input placeholder="미리 작성된 상담 기록" readonly aria-label="시뮬레이션 대화"/><button class="send" onclick="showToast('이번 버전은 미리 작성된 친도 대화로 구성했어.')">↑</button></div></div>`) } return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>ChatGPT</h1><button class="close" onclick="goHome()">×</button></div><div class="content aithreads">${aiThreads.map((t,i)=>`<button class="row" onclick="openAIThread(${i})"><div><div class="aititle">${t.title}</div><div class="aisub">${t.sub}</div></div><div class="meta">›</div></button>`).join('')}</div>`)}
 function instagramHTML(){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>Instagram</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="instaHeader"><div class="profileCard"><div class="avatar" style="width:82px;height:82px"><img src="assets/photos/003.jpg"></div><div><div style="font-size:22px;font-weight:700">jihoon.h</div><div style="font-size:13px;color:#7a8290">한지훈</div></div><div class="profileStats"><div><b>12</b>게시물</div><div><b>187</b>팔로워</div><div><b>142</b>팔로잉</div></div></div><div class="bio"><b>무용 / 그냥 사는 중</b><br>연습실, 학교, 가끔 반려견.<br><span style="color:#0a84ff">팔로잉에서 지후 선배는 사라짐.</span></div></div><div class="storyBar"><div class="story"><div class="ring"><div><img src="assets/photos/011.jpg"></div></div>연습</div><div class="story"><div class="ring"><div><img src="assets/photos/012.jpg"></div></div>두리</div><div class="story"><div class="ring"><div><img src="assets/photos/013.jpg"></div></div>초코</div><div class="story"><div class="ring"><div><img src="assets/photos/009.jpg"></div></div>아카이브</div></div><div class="instaGrid">${instaPosts.map(p=>`<img src="assets/photos/${p}">`).join('')}</div></div>`)}
-function xHTML(){ let inner=''; if(state.xTab==='search'){ inner = `<div class="trends">${xTweets.search.map(t=>`<div class="row"><div><div class="title">${t[1]}</div><div class="meta">${t[2]}</div></div><button style="color:#0a84ff" onclick="switchX('scandal')">보기</button></div>`).join('')}</div>`; } else { inner = xTweets.scandal.map(t=>`<div class="tweet"><div class="user">${t[0]} <span class="handle">· 팬 계정</span></div><div class="body">${t[1]}</div><div class="meta">${t[2]}</div></div>`).join('') } return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>X</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="xheader"><div class="searchbar">🔎  신유 열애설</div></div><div class="seg"><button class="${state.xTab==='search'?'active':''}" onclick="switchX('search')">검색 기록</button><button class="${state.xTab==='scandal'?'active':''}" onclick="switchX('scandal')">팬 반응</button></div>${inner}</div>`)}
+function xHTML(){ let inner=''; if(state.xTab==='search'){ inner = `<div class="trends">${xTweets.search.map(t=>`<div class="row"><div><div class="title">${t[1]}</div><div class="meta">${t[2]}</div></div><button style="color:#0a84ff" onclick="switchX('scandal')">보기</button></div>`).join('')}</div>`; } else { inner = xTweets.scandal.map(t=>`<div class="tweet"><div class="user">${t[0]} <span class="handle">· 팬 계정</span></div><div class="body">${t[1]}</div><div class="meta">${t[2]}</div></div>`).join('') } return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>X</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="xheader"><label class="ios-search" data-variant="filled"><i class="ios-icon ios-icon--search"></i><input type="search" value="신유 열애설" aria-label="X 검색" readonly></label></div><div class="seg"><button class="${state.xTab==='search'?'active':''}" onclick="switchX('search')">검색 기록</button><button class="${state.xTab==='scandal'?'active':''}" onclick="switchX('scandal')">팬 반응</button></div>${inner}</div>`)}
 function weverseHTML(){ let feed=''; if(state.weverseTab==='artist'){ feed = `
  <div class="wvCard"><div class="wvMeta"><div class="miniava"><img src="assets/photos/009.jpg"></div><div><div class="metaTop">귀염둥이 딸기 오빠 🍓</div><div class="metaSub">10.16. 17:13</div></div></div><div class="caption">금요일 파이팅!</div><div class="screenShot"><img src="assets/weverse/post1.png"></div></div>
  <div class="wvCard"><div class="wvMeta"><div class="miniava"><img src="assets/photos/001.jpg"></div><div><div class="metaTop">귀염둥이 딸기 오빠 🍓</div><div class="metaSub">09.02. 14:06</div></div></div><div class="caption">OOTD</div><div class="screenShot"><img src="assets/weverse/post2.png"></div></div>
  <div class="wvCard"><div class="wvMeta"><div class="miniava"><img src="assets/photos/002.jpg"></div><div><div class="metaTop">귀염둥이 딸기 오빠 🍓</div><div class="metaSub">10.17. 22:24</div></div></div><div class="caption">첫만남 신유</div><div class="screenShot"><img src="assets/weverse/post3.png"></div></div>
  <div class="wvCard"><div class="wvMeta"><div class="miniava"><img src="assets/photos/003.jpg"></div><div><div class="metaTop">귀염둥이 딸기 오빠 🍓</div><div class="metaSub">09.23. 22:57</div></div></div><div class="caption">즐거운 추석을 보내세용</div><div class="screenShot"><img src="assets/weverse/post4.png"></div></div>`; } else if(state.weverseTab==='live'){ feed = `<a class="livecard" href="https://weverse.io/tws/live/2-180502498?hl=ko" target="_blank" rel="noreferrer"><div class="thumb"><img src="assets/weverse/live_thumb.png"></div><div><div class="title">제철 신(유) 🦐</div><div class="metaSub" style="margin-top:8px">09.24. 14:09 · 재생 278K · 채팅 66.6K</div><div class="pill">LIVE 링크 열기 ↗</div><div style="margin-top:10px;font-size:14px;line-height:1.45;color:#4c5563">썸네일을 누르면 실제 위버스 라이브 페이지로 이동해.</div></div></a>`; } else { feed = `<div style="padding:26px 18px;color:#65707f">${state.weverseTab} 탭은 다음 버전에서 더 채울 예정이야.</div>`; } return `<div class="wvapp"><div class="wvTop"><div class="wvToolbar"><div style="font-size:24px">☰</div><div class="brand"><span class="wlogo">w</span> 1SECOND</div><div style="margin-left:auto;display:flex;gap:14px;align-items:center"><div class="avatar" style="width:32px;height:32px;border-radius:50%"><img src="assets/photos/003.jpg"></div><div style="position:relative">🔔<span style="position:absolute;top:-8px;right:-12px;background:#ff5a5f;color:#fff;border-radius:999px;font-size:10px;padding:2px 4px">99+</span></div><div>✈️</div></div></div><div class="wvHero"><img class="bglogo" src="assets/one_second_logo.svg" alt="1SECOND"><div class="sub">4.2만 members · ✓ 가입 완료</div><h2>1SECOND</h2><div class="membership"><span class="shield">♡</span> Membership</div></div><div class="wvTabs"><button class="${state.weverseTab==='highlight'?'active':''}" onclick="switchWeverse('highlight')">Highlight</button><button class="${state.weverseTab==='fan'?'active':''}" onclick="switchWeverse('fan')">Fan</button><button class="${state.weverseTab==='artist'?'active':''}" onclick="switchWeverse('artist')">Artist</button><button class="${state.weverseTab==='fanletter'?'active':''}" onclick="switchWeverse('fanletter')">Fan Letter</button><button class="${state.weverseTab==='media'?'active':''}" onclick="switchWeverse('media')">Media</button><button class="${state.weverseTab==='live'?'active':''}" onclick="switchWeverse('live')">LIVE</button><button class="${state.weverseTab==='notice'?'active':''}" onclick="switchWeverse('notice')">Notice</button><button class="${state.weverseTab==='shop'?'active':''}" onclick="switchWeverse('shop')">Shop</button></div></div><div class="wvFeed">${feed}</div><div class="homebar" onclick="goHome()"></div></div>`}
-function musicHTML(){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>Apple Music</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="musicHero"><div class="playlistHead"><div class="playlistArt"><img src="assets/music/one_more_second.svg"></div><div><div class="playlistTitle">읽씹?
+function musicHTML(){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>Apple Music</h1><button class="close" onclick="goHome()">×</button></div><div class="content" style="padding-bottom:200px"><div class="musicHero"><div class="playlistHead"><div class="playlistArt"><img src="assets/music/one_more_second.svg"></div><div><div class="playlistTitle">읽씹?
 플레이리스트</div><div class="playlistMeta">지훈이 저장한 플레이리스트 · 8곡<br>최근 재생: One More Second</div></div></div></div><div class="playactions"><button class="playbtn">▶</button><button class="shuffle">⇄</button></div>${playlist.map((t,i)=>`<div class="track"><div style="width:20px;text-align:right;color:#7a8290">${i+1}</div><div class="cov"><img src="${t[2]}"></div><div><div class="tt">${t[1]}</div><div class="ta">${t[0]}</div></div></div>`).join('')}</div>`)}
 function simpleApp(title,desc){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>${title}</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div style="padding:28px 18px;color:#616a78;line-height:1.6">${desc}</div></div>`)}
-function appHTML(){ switch(state.app){ case'phone':return phoneHTML(); case'kakao':return kakaoHTML(); case'photos':return photosHTML(); case'ai':return aiHTML(); case'instagram':return instagramHTML(); case'x':return xHTML(); case'weverse':return weverseHTML(); case'music':return musicHTML(); case'safari':return safariHTML(); case'notes':return notesHTML(); case'calendar':return simpleApp('캘린더','팬싸 날짜, 학교 일정, 공연 연습 날짜 같은 작은 흔적을 넣을 예정이야.'); case'camera':return simpleApp('카메라','이번 버전에서는 사진첩을 먼저 구현했어.'); default:return '' } }
-function render(){ const root=q('#screen'); let html=''; if(state.view==='lock') html=lockHTML(); else if(state.view==='passcode') html=pinHTML(); else if(state.view==='home') html=homeHTML(); else html=appHTML(); if(state.toast) html += `<div class="toast">${state.toast}</div>`; root.innerHTML=html; document.querySelector('.status')?.classList.toggle('appstatus',state.view==='app'); }
+function messagesHTML(){
+ if(state.detail==='sms-chat')return `<div class="msg-app"><header class="ios-navbar"><div class="ios-navbar__bar"><div class="ios-navbar__leading"><button class="ios-barbutton" onclick="state.detail=null;render()"><i class="ios-icon ios-icon--chevron-left"></i></button></div><h1 class="ios-navbar__inline-title">누나</h1><div class="ios-navbar__trailing"><button class="ios-barbutton" onclick="goHome()"><i class="ios-icon ios-icon--home"></i></button></div></div></header><div class="msg-content"><div class="ios-messages" data-service="sms" style="flex:1;justify-content:flex-end"><p class="ios-messages__time"><b>어제</b> 오후 7:10</p><div class="ios-bubble" data-from="them" data-tail>너 내 충전기 가져갔지?</div><div class="ios-bubble" data-from="me" data-tail>안 가져갔는데</div><div class="ios-bubble" data-from="them" data-tail>내 책상에 있네 ㅈㅅ</div></div></div><div class="ios-compose"><button class="ios-barbutton" aria-label="추가"><i class="ios-icon ios-icon--plus"></i></button><label class="ios-compose__field"><input id="sms-compose" onfocus="showKeyboard('sms-compose')" placeholder="문자 메시지" aria-label="문자 메시지"><button class="ios-compose__send" onclick="sendSMS()" aria-label="전송"><i class="ios-icon ios-icon--arrow-up"></i></button></label></div></div>`;
+ return `<div class="msg-app">${iosNavbar('메시지',false,'goHome()')}<div class="msg-content"><div class="search-frame"><label class="ios-search" data-variant="filled"><i class="ios-icon ios-icon--search"></i><input type="search" placeholder="검색" aria-label="문자 메시지 검색"></label></div>${kitList([kitRow('누나','너 내 충전기 가져갔지?',"state.detail='sms-chat';render()",'chevron-right')])}</div></div>`;
+}
+function sendSMS(){const el=document.getElementById('sms-compose');if(!el||!el.value.trim())return;const content=document.querySelector('.ios-messages');if(content){const b=document.createElement('div');b.className='ios-bubble';b.dataset.from='me';b.setAttribute('data-tail','');b.textContent=el.value;content.append(b);content.scrollTop=content.scrollHeight;}el.value=''}
+function appHTML(){ switch(state.app){ case'phone':return phoneHTML(); case'messages':return messagesHTML(); case'kakao':return kakaoHTML(); case'photos':return photosHTML(); case'ai':return aiHTML(); case'instagram':return instagramHTML(); case'x':return xHTML(); case'weverse':return weverseHTML(); case'music':return musicHTML(); case'safari':return safariHTML(); case'notes':return notesHTML(); case'calendar':return simpleApp('캘린더','팬싸 날짜, 학교 일정, 공연 연습 날짜 같은 작은 흔적을 넣을 예정이야.'); case'camera':return simpleApp('카메라','이번 버전에서는 사진첩을 먼저 구현했어.'); default:return '' } }
+
+function iosTabBar(tabs, selected, app){return `<nav class="ios-tabbar" aria-label="${app} 탭"><div class="ios-tabbar__bar" style="--tabs:${tabs.length}">${tabs.map(([id,label,icon])=>`<label class="ios-tab"><input type="radio" name="${app}-tabs" aria-label="${label}" ${selected===id?'checked':''} onchange="switchAppTab('${app}','${id}')"><i class="ios-icon ios-icon--${icon}"></i><span>${label}</span></label>`).join('')}</div></nav>`;}
+function switchAppTab(app,tab){if(app==='phone'){state.phoneTab=tab;state.detail=null;} if(app==='photos'){state.photosTab=tab;state.photoIndex=null;} if(app==='music')state.musicTab=tab;render();}
+function iosNavbar(title,inline=true,back=null){return `<header class="ios-navbar"><div class="ios-navbar__bar"><div class="ios-navbar__leading">${back?`<button class="ios-barbutton" onclick="${back}" aria-label="뒤로"><i class="ios-icon ios-icon--chevron-left"></i></button>`:''}</div>${inline?`<h1 class="ios-navbar__inline-title">${title}</h1>`:''}<div class="ios-navbar__trailing"><button class="ios-barbutton" onclick="goHome()" aria-label="홈으로"><i class="ios-icon ios-icon--home"></i></button></div></div>${inline?'':`<h1 class="ios-navbar__large-title">${title}</h1>`}</header>`;}
+function kitRow(label,detail='',action='',icon='chevron-right'){return `<button class="ios-row" onclick="${action}"><div class="ios-row__body"><span class="ios-row__title">${label}</span>${detail?`<span class="ios-row__detail">${detail}</span>`:''}<i class="ios-icon ios-icon--${icon}"></i></div></button>`;}
+function kitList(rows,title=''){return `<div class="ios-list" style="padding:16px 0"><section class="ios-list__section">${title?`<h2 class="ios-list__header">${title}</h2>`:''}<div class="ios-list__group" data-variant="plain">${rows.join('')}</div></section></div>`;}
+function polishKitUI(){
+ const root=q('#screen');
+ // Swap placeholder navigation markup for exact kit navbar structure, retaining original event handlers.
+ root.querySelectorAll('.app > .topnav').forEach(old=>{
+  const title=old.querySelector('h1')?.textContent?.trim()||'앱';
+  const back=old.querySelector('button.back');
+  const inline=!!(state.detail!==null || state.photoIndex!==null || state.aiThread!==null);
+  const header=document.createElement('header');header.className='ios-navbar';
+  const bar=document.createElement('div');bar.className='ios-navbar__bar';
+  const leading=document.createElement('div');leading.className='ios-navbar__leading';
+  if(back){const b=document.createElement('button');b.className='ios-barbutton';b.setAttribute('aria-label','뒤로');b.onclick=()=>back.click();b.innerHTML='<i class="ios-icon ios-icon--chevron-left"></i>';leading.append(b);}
+  const trailing=document.createElement('div');trailing.className='ios-navbar__trailing';
+  const done=document.createElement('button');done.className='ios-barbutton';done.setAttribute('aria-label','홈');done.innerHTML='<i class="ios-icon ios-icon--home"></i>';done.onclick=goHome;trailing.append(done);
+  bar.append(leading);
+  if(inline){const h=document.createElement('h1');h.className='ios-navbar__inline-title';h.textContent=title;bar.append(h);}
+  bar.append(trailing);header.append(bar);
+  if(!inline){const h=document.createElement('h1');h.className='ios-navbar__large-title';h.textContent=title;header.append(h);}
+  old.replaceWith(header);
+ });
+ // Convert actual phone call entries into kit list rows, retaining the same call index and click behavior.
+ if(state.app==='phone'&&state.view==='app'&&state.detail===null){
+   const content=root.querySelector('.app>.content');if(content){
+    const matches=calls.map((c,i)=>[c,i]).filter(([c])=>state.phoneTab==='all'||c[2]==='부재중');
+    content.innerHTML=kitList(matches.map(([c,i])=>kitRow(c[0],c[1],`contactDetail(${i})`)),state.phoneTab==='missed'?'부재중 전화':'최근 통화');
+   }
+ }
+ if(state.app==='notes'&&state.view==='app'&&state.detail===null){const content=root.querySelector('.app>.content');if(content){content.innerHTML=kitList(diaryEntries.map((d,i)=>kitRow(d.title,`${d.pages.length}페이지`,`state.detail=${i};render()`)),'일기');}}
+ if(state.app==='ai'&&state.view==='app'&&state.aiThread===null){const content=root.querySelector('.app>.content');if(content){content.innerHTML=kitList(aiThreads.map((t,i)=>kitRow(t.title,'',`openAIThread(${i})`)),'이전 대화');}}
+ if(state.app==='safari'&&state.view==='app'){
+  const content=root.querySelector('.app>.content');if(content){content.innerHTML=`<div class="search-frame"><label class="ios-search" data-variant="filled"><i class="ios-icon ios-icon--search"></i><input type="search" placeholder="검색 또는 웹 사이트 이름 입력" aria-label="Safari 검색"></label></div>`+kitList(['원세컨드 신유','신정환','성지유'].map((x)=>kitRow(x,'검색 기록',`showToast('저장된 검색 기록: ${x}')`)),'최근 검색 기록');}
+ }
+ if(state.view==='app' && ['phone','photos','music'].includes(state.app)){
+  const app=root.querySelector('.app');if(app){app.classList.add('has-ios-tabbar');let html='';
+   if(state.app==='phone')html=iosTabBar([['all','최근','timer'],['missed','부재중','bell']],state.phoneTab,'phone');
+   if(state.app==='photos'){
+    html=iosTabBar([['library','보관함','image'],['albums','앨범','grid']],state.photosTab,'photos');
+    if(state.photosTab==='albums'&&state.photoIndex===null){const content=app.querySelector('.content');if(content){content.innerHTML=kitList([kitRow('최근 항목',`${PHOTOS.length}개 사진`,"switchAppTab('photos','library')"),kitRow('즐겨찾기','사진 모음',"switchAppTab('photos','library')")],'앨범');}}
+   }
+   if(state.app==='music')html=iosTabBar([['playlist','플레이리스트','library'],['listen','지금 듣기','play']],state.musicTab,'music');
+   app.insertAdjacentHTML('beforeend',html);
+  }
+ }
+}
+const uiExtra={keyboard:false,numbers:false,shift:false,track:2,playing:false,shareIndex:0};
+function escapeText(value){return String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');}
+function keyboardHTML(){const letters=uiExtra.numbers?['1234567890','-/:;()$&@"','.,?!\'']:['qwertyuiop','asdfghjkl','zxcvbnm'];
+ const row=(str)=>Array.from(str).map(ch=>`<button class="ios-key" onclick="keyboardPress(${JSON.stringify(ch)})">${escapeText(ch)}</button>`).join('');
+ const rows=uiExtra.numbers?`<div class="ios-keyboard__row">${row(letters[0])}</div><div class="ios-keyboard__row">${row(letters[1])}</div><div class="ios-keyboard__row" data-stretch><button class="ios-key" data-fn data-flex onclick="uiExtra.numbers=false;refreshKeyboard()">#+=</button>${row(letters[2])}<button class="ios-key" data-fn data-flex aria-label="Delete" onclick="keyboardPress('BACK')"><i class="ios-icon ios-icon--backspace"></i></button></div>`:`<div class="ios-keyboard__row">${row(letters[0])}</div><div class="ios-keyboard__row">${row(letters[1])}</div><div class="ios-keyboard__row"><button class="ios-key" data-fn data-flex ${uiExtra.shift?'data-active':''} aria-label="Shift" onclick="uiExtra.shift=!uiExtra.shift;refreshKeyboard()"><i class="ios-icon ios-icon--shift-fill"></i></button>${row(letters[2])}<button class="ios-key" data-fn data-flex aria-label="Delete" onclick="keyboardPress('BACK')"><i class="ios-icon ios-icon--backspace"></i></button></div>`;
+ return `<div class="ios-keyboard keyboard-overlay"><div class="ios-keyboard__suggest"><button>지훈아</button><button>ㅋㅋ</button><button>그래</button></div><div class="ios-keyboard__keys">${rows}<div class="ios-keyboard__row"><button class="ios-key" data-fn data-wide onclick="uiExtra.numbers=!uiExtra.numbers;refreshKeyboard()">${uiExtra.numbers?'ABC':'123'}</button><button class="ios-key" data-space onclick="keyboardPress(' ')">space</button><button class="ios-key" data-fn data-wide data-tone="tint" onclick="keyboardDone()">전송</button></div></div><div class="ios-keyboard__bottom"><button aria-label="Emoji" onclick="keyboardPress('😊')"><i class="ios-icon ios-icon--smile"></i></button><button aria-label="키보드 닫기" onclick="hideKeyboard()"><i class="ios-icon ios-icon--mic" style="--w:14px;--h:20px"></i></button></div></div>`;}
+function refreshKeyboard(){const previous=document.querySelector('.keyboard-overlay');if(previous)previous.outerHTML=keyboardHTML();}
+function showKeyboard(id){uiExtra.keyboard=id;document.querySelector('.ios-surface')?.classList.add('keyboard-open');let root=document.querySelector('#screen');if(!root)return;root.querySelector('.keyboard-overlay')?.remove();root.insertAdjacentHTML('beforeend',keyboardHTML());}
+function hideKeyboard(){uiExtra.keyboard=false;document.querySelector('#screen .keyboard-overlay')?.remove();document.querySelector('.ios-surface')?.classList.remove('keyboard-open');}
+function keyboardPress(key){let el=document.getElementById(uiExtra.keyboard);if(!el)return;let start=el.selectionStart??el.value.length,end=el.selectionEnd??start;if(key==='BACK'){if(start===end&&start>0)start--;el.value=el.value.slice(0,start)+el.value.slice(end);el.setSelectionRange(start,start)}else{let v=uiExtra.shift?key.toUpperCase():key;el.value=el.value.slice(0,start)+v+el.value.slice(end);el.setSelectionRange(start+v.length,start+v.length)}el.focus({preventScroll:true});}
+function keyboardDone(){if(uiExtra.keyboard==='kk-input')kkSend();else if(uiExtra.keyboard==='sms-compose')sendSMS();hideKeyboard();}
+function musicAccessory(){let t=playlist[uiExtra.track]||playlist[2];return `<div class="ios-accessory music-mini"><span class="ios-accessory__art" style="background-image:url('${t[2]}')"></span><span class="ios-accessory__text">${escapeText(t[1])}<small>${escapeText(t[0])}</small></span><label class="ios-accessory__button"><input type="checkbox" aria-label="Play or pause" ${uiExtra.playing?'checked':''} onchange="uiExtra.playing=this.checked"><i class="ios-icon ios-icon--play"></i><i class="ios-icon ios-icon--pause"></i></label><button class="ios-accessory__button" aria-label="Next" onclick="uiExtra.track=(uiExtra.track+1)%playlist.length;render()"><i class="ios-icon ios-icon--forward"></i></button></div>`;}
+function photoLayers(){let fn=PHOTOS[state.photoIndex??0];const src=`assets/photos/${fn}`;return `<div id="share" class="ios-layer"><a class="ios-layer__scrim" href="#_" aria-label="Dismiss"></a><div class="ios-sheet" data-detent="medium" role="dialog" aria-label="사진 공유" style="--sheet-h:76%"><span class="ios-sheet__grabber"></span><div class="ios-sheet__toolbar"><div class="ios-sheet__leading"><div class="ios-share__preview"><span class="ios-share__thumb"><img src="${src}" alt="선택한 사진"></span><div><span class="ios-share__title">${escapeText(fn)}</span><span class="ios-share__meta">사진 · <a href="#_">옵션</a></span></div></div></div><div class="ios-sheet__trailing"><a class="ios-barbutton" href="#_" aria-label="Close"><i class="ios-icon ios-icon--xmark"></i></a></div></div><div class="ios-sheet__body"><div class="ios-share__row"><a class="ios-share__item" href="#_" onclick="showToast('공유 시뮬레이션')"><span class="ios-share__avatar" style="background:#d7e7f8;color:#1d3b58">정</span><small>신정환</small></a></div><div class="ios-share__row"><a class="ios-share__item" href="#_" onclick="showToast('AirDrop 시뮬레이션')"><span class="ios-share__app"><img src="assets/icons/icon_safari.svg" alt=""></span><small>AirDrop</small></a><a class="ios-share__item" href="#_" onclick="showToast('메시지 공유 시뮬레이션')"><span class="ios-share__app"><img src="${ICONS.messages}" alt=""></span><small>메시지</small></a><a class="ios-share__item" href="#_" onclick="showToast('메모 저장 시뮬레이션')"><span class="ios-share__app"><img src="${ICONS.notes}" alt=""></span><small>메모</small></a></div><div class="ios-list ios-share__actions"><section class="ios-list__section"><div class="ios-list__group"><a href="#_" class="ios-row" onclick="copyPhotoInfo()"><div class="ios-row__body"><span class="ios-row__title">파일명 복사</span><i class="ios-icon ios-icon--copy"></i></div></a><a href="#_" class="ios-row" onclick="showToast('즐겨찾기에 추가했어')"><div class="ios-row__body"><span class="ios-row__title">즐겨찾기에 추가</span><i class="ios-icon ios-icon--star"></i></div></a></div></section></div></div></div></div><div id="as-a" class="ios-layer"><a class="ios-layer__scrim" href="#_" aria-label="Dismiss"></a><div class="ios-actionsheet" role="dialog" aria-label="사진 옵션"><div class="ios-actionsheet__group"><div class="ios-actionsheet__header"><b>사진 옵션</b>이 사진을 어떻게 할까?</div><a class="ios-actionsheet__action" href="#_" onclick="showToast('사진 정보: ${escapeText(fn)}')">사진 정보 보기</a><a class="ios-actionsheet__action" href="#_" onclick="showToast('즐겨찾기에 추가했어')">즐겨찾기 추가</a><a class="ios-actionsheet__action" data-destructive href="#_" onclick="showToast('시뮬레이터에서는 사진을 삭제하지 않아')">사진 삭제</a></div><div class="ios-actionsheet__group" data-pill><a class="ios-actionsheet__action" data-role="cancel" href="#_">취소</a></div></div></div><div id="sheet-m" class="ios-layer"><a class="ios-layer__scrim" href="#_" aria-label="Dismiss"></a><div class="ios-sheet" data-detent="medium" role="dialog" aria-label="사진 세부정보"><span class="ios-sheet__grabber"></span><div class="ios-sheet__toolbar"><div class="ios-sheet__leading"><a class="ios-barbutton" href="#_" aria-label="닫기"><i class="ios-icon ios-icon--xmark"></i></a></div><h2 class="ios-sheet__title">사진 정보</h2><div class="ios-sheet__trailing"><a class="ios-barbutton" data-variant="prominent" href="#_" aria-label="완료"><i class="ios-icon ios-icon--checkmark"></i></a></div></div><div class="ios-sheet__body"><div class="ios-list"><section class="ios-list__section"><div class="ios-list__group"><div class="ios-row"><div class="ios-row__body"><span class="ios-row__title">파일 이름</span><span class="ios-row__detail">${escapeText(fn)}</span></div></div><div class="ios-row"><div class="ios-row__body"><span class="ios-row__title">보관함</span><span class="ios-row__detail">최근 항목</span></div></div></div></section></div></div></div></div>`;}
+function copyPhotoInfo(){let fn=PHOTOS[state.photoIndex??0];if(navigator.clipboard?.writeText)navigator.clipboard.writeText(fn).then(()=>showToast('파일명을 복사했어')).catch(()=>showToast(fn));else showToast(fn);}
+function render(){
+  const root=q('#screen');
+  let html='';
+  if(state.view==='lock') html=lockHTML();
+  else if(state.view==='passcode') html=pinHTML();
+  else if(state.view==='home') html=homeHTML();
+  else html=appHTML();
+  if(state.toast) html += `<div class="toast">${state.toast}</div>`;
+  if(state.incoming) html += incomingHTML();
+  if(state.view==='app'&&state.app==='photos'&&state.photoIndex!==null) html += photoLayers();
+  if(state.view==='app'&&state.app==='music') html += musicAccessory();
+  const onDark = state.view==='lock'||state.view==='passcode'||(state.view==='app'&&state.app==='photos'&&state.photoIndex!==null);
+  const status = `<div class="ios-island"></div><div class="ios-statusbar" style="color:${onDark?'#fff':'#17191f'}"><div class="ios-statusbar__row"><span class="ios-statusbar__time">9:41</span><span class="ios-statusbar__island-gap"></span><span class="ios-statusbar__icons"><i class="ios-icon ios-icon--cellular"></i><i class="ios-icon ios-icon--wifi"></i><span class="ios-battery" style="--level:82"><i></i></span></span></div></div>`;
+  const indicator = `<div class="ios-home-indicator"${onDark?' data-tone="white"':''} role="button" tabindex="0" aria-label="홈으로 이동" onclick="indicatorAction()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();indicatorAction()}"></div>`;
+  // Status bar is first; home indicator is last, as required by the kit.
+  root.innerHTML=status+html+indicator;
+  polishKitUI();
+}
+function indicatorAction(){
+  if(state.view==='lock'){beginUnlock();return;}
+  if(state.view==='passcode'){state.view='lock';render();return;}
+  if(state.view==='app')goHome();
+}
+
 let touchStartY=null, appGestureStart=null;
 q('#screen').addEventListener('touchstart',e=>{if(state.view==='lock')touchStartY=e.touches[0].clientY; if(state.view==='app' && e.touches[0].clientY>window.innerHeight-85) appGestureStart=e.touches[0].clientY;},{passive:true});
 q('#screen').addEventListener('touchend',e=>{if(state.view==='lock'&&touchStartY!==null){const dy=touchStartY-e.changedTouches[0].clientY;if(dy>55)beginUnlock();touchStartY=null;} if(state.view==='app' && appGestureStart!==null){ if(appGestureStart-e.changedTouches[0].clientY>65)goHome();appGestureStart=null;}},{passive:true});

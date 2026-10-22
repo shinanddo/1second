@@ -1,0 +1,1 @@
+iOS 26 kit components: Keyboard, Segmented, Tab Bar, Bottom accessory, Sheet, Share sheet, Action sheet, Widget. The external ios.css is linked, not redistributed. Photos/music/message interactions are in-page simulations.
