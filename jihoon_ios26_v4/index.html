@@ -1,0 +1,238 @@
+<!doctype html>
+<!-- iOS 26-inspired fan fiction simulation. Not an Apple/Figma official app. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<title>한지훈의 iPhone · 읽씹?</title>
+<style>
+:root{--bg:#edf1f7;--ink:#16181d;--muted:#6d7480;--glass:rgba(255,255,255,.56);--line:rgba(255,255,255,.55);--shadow:0 18px 40px rgba(21,26,38,.18)}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#20252e;color:var(--ink)}
+button,input,textarea{font:inherit}button{border:0;background:none;padding:0;cursor:pointer}img{display:block;max-width:100%}a{color:inherit;text-decoration:none}
+#stage{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at top left,#546173,#1f232b 56%)}
+.device{width:min(390px,100vw);height:min(844px,100dvh);border-radius:54px;overflow:hidden;position:relative;background:linear-gradient(160deg,#8aa4ba,#d9c5c4 55%,#8293b1);box-shadow:0 0 0 1px rgba(255,255,255,.12),0 0 0 7px #101216,var(--shadow)}
+@media (max-width:640px){#stage{padding:0}.device{width:100vw;height:100dvh;border-radius:0;box-shadow:none}}
+.wallpaper:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.45),transparent 30%),radial-gradient(circle at 85% 80%,rgba(100,126,199,.28),transparent 28%)}
+.status{position:absolute;inset:0 0 auto 0;height:54px;padding:15px 28px 0;display:flex;justify-content:space-between;align-items:flex-start;z-index:20;color:#fff;font-weight:700;font-size:14px;pointer-events:none;text-shadow:0 1px 10px rgba(0,0,0,.18)}
+.status .sys{display:flex;align-items:center;gap:6px;font-size:12px}
+.island{position:absolute;left:50%;top:9px;transform:translateX(-50%);width:108px;height:28px;border-radius:100px;background:#090a0c;z-index:25;box-shadow:inset 0 -1px 3px rgba(255,255,255,.08)}
+.homebar{position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:122px;height:5px;border-radius:999px;background:rgba(0,0,0,.72);z-index:30} .homebar.light{background:rgba(255,255,255,.95)}
+.glass{backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(255,255,255,.34));border:1px solid rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 8px 24px rgba(11,25,54,.10)}
+.screen{position:absolute;inset:0;overflow:hidden}
+.lock{height:100%;display:flex;flex-direction:column;align-items:center;padding:74px 22px 28px;color:#fff;position:relative;text-align:center}
+.lock .date{font-size:18px;font-weight:560} .lock .time{font-size:84px;line-height:1.05;letter-spacing:-4px;font-weight:250;margin-top:6px}
+.notice{margin-top:26px;width:100%;border-radius:22px;padding:14px;display:flex;gap:12px;align-items:flex-start;color:#1d1f26;text-align:left}
+.notice img{width:44px;height:44px;border-radius:12px}
+.notice .meta{font-size:12px;color:#5c6370;margin-bottom:4px}
+.unlocktip{margin-top:auto;font-size:13px;opacity:.95}
+.lock .actions{width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.circlebtn{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(20,20,20,.28);border:1px solid rgba(255,255,255,.22);font-size:20px}
+.home{height:100%;padding:68px 18px 88px;display:flex;flex-direction:column}
+.widgets{display:grid;grid-template-columns:1.25fr 1fr;gap:12px}
+.widget{border-radius:26px;padding:15px;min-height:132px;display:flex;flex-direction:column;justify-content:space-between;color:#1f2733}
+.widget .tiny{font-size:12px;color:#465266}.widget .big{font-size:34px;font-weight:380;letter-spacing:-1px}.widget .sub{font-size:13px;color:#324155}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;margin-top:auto}
+.appbtn{display:flex;flex-direction:column;align-items:center;gap:6px;color:#1e2330;font-size:11px;text-shadow:0 1px 6px rgba(255,255,255,.35)}
+.appicon{width:60px;height:60px;border-radius:18px;overflow:hidden;box-shadow:0 8px 18px rgba(21,26,38,.18);background:#fff}
+.appicon img{width:100%;height:100%;object-fit:cover}
+.appicon.svgpad img{padding:0;background:#fff}
+.badge{position:absolute;top:-4px;right:-2px;background:#ff3b30;color:#fff;min-width:18px;height:18px;padding:0 6px;border-radius:12px;font-size:11px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.dock{margin-top:18px;padding:12px 10px;border-radius:29px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pages{display:flex;justify-content:center;gap:6px;margin-top:14px} .pages span{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.28)} .pages span:first-child{width:18px;border-radius:999px;background:rgba(0,0,0,.56)}
+.app{background:#f6f7fb;color:var(--ink)}
+.topnav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #edf0f4;background:rgba(248,249,253,.92);backdrop-filter:blur(18px);position:sticky;top:0;z-index:5}
+.topnav h1{margin:0;font-size:18px} .topnav .back{color:#0a84ff;font-size:17px} .topnav .close{font-size:24px;color:#707784}
+.content{height:calc(100% - 56px);overflow:auto;-webkit-overflow-scrolling:touch;background:#fff}
+.list{padding:0 16px} .row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #eef1f5} .row .title{font-size:17px} .row .meta{font-size:13px;color:#79808d;margin-top:2px}
+.sectiontitle{padding:18px 16px 8px;font-size:13px;color:#79808d;font-weight:600}
+.profilehero{display:flex;flex-direction:column;align-items:center;padding:26px 16px 20px}
+.avatar{width:92px;height:92px;border-radius:50%;overflow:hidden;background:#dfe7f4} .avatar img{width:100%;height:100%;object-fit:cover} .name{margin-top:10px;font-size:28px;font-weight:700} .phoneNo{font-size:15px;color:#79808d;margin-top:3px}
+.contactchips{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center} .chip{padding:10px 14px;border-radius:16px;background:#f2f5f8;font-size:13px}
+.chatlist .row{padding:14px 16px} .chatlist .thumb{width:50px;height:50px;border-radius:18px;overflow:hidden;background:#f0f0f0;margin-right:12px;flex:0 0 auto} .chatlist .thumb img{width:100%;height:100%;object-fit:cover} .chatlist .txt{flex:1;min-width:0} .chatlist .right{text-align:right;font-size:12px;color:#7c8390} .chatlist .preview{color:#6a7280;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:195px} .chatlist .name{font-size:16px;font-weight:600;margin:0}
+.chatview{display:flex;flex-direction:column;height:100%;background:#bfcbd8} .chatheader{height:54px;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.42);background:rgba(245,246,248,.85);backdrop-filter:blur(16px)} .chatheader .avatar{width:34px;height:34px;border-radius:12px}
+.messages{flex:1;overflow:auto;padding:18px 14px 24px} .daymark{text-align:center;color:#eff2f7;font-size:12px;background:rgba(0,0,0,.18);display:inline-block;padding:6px 10px;border-radius:999px;margin:0 auto 14px;position:relative;left:50%;transform:translateX(-50%)}
+.bubble{max-width:73%;padding:11px 13px;border-radius:19px;font-size:15px;line-height:1.42;white-space:pre-wrap;box-shadow:0 3px 10px rgba(0,0,0,.08);margin-bottom:10px}
+.bubble.me{margin-left:auto;background:#fee500;color:#2a2000;border-bottom-right-radius:6px} .bubble.other{background:#fff;border-bottom-left-radius:6px}
+.chatinput{padding:10px 12px 18px;background:rgba(245,246,248,.92);display:flex;gap:10px;align-items:center;border-top:1px solid rgba(0,0,0,.05)} .chatinput .field{flex:1;border-radius:22px;background:#fff;padding:11px 14px;color:#a0a7b3}
+.seg{display:flex;gap:8px;padding:12px 16px 10px;background:#fff;position:sticky;top:0;z-index:3} .seg button{padding:7px 12px;border-radius:999px;background:#f2f5f9;color:#65707f} .seg button.active{background:#0a84ff;color:#fff}
+.photogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#fff} .photogrid button{aspect-ratio:1/1;overflow:hidden;background:#f1f3f6} .photogrid img{width:100%;height:100%;object-fit:cover}
+.photoViewer{position:absolute;inset:0;background:#0b0d11;color:#fff;display:flex;flex-direction:column} .photoViewer .viewerTop{height:52px;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(0,0,0,.45),transparent)} .photoViewer .stage{flex:1;display:flex;align-items:center;justify-content:center;padding:18px} .photoViewer .stage img{max-width:100%;max-height:100%;border-radius:24px;box-shadow:0 18px 40px rgba(0,0,0,.35)} .photoViewer .cap{padding:14px 18px 24px;color:#d7dce6;font-size:14px}
+.aithreads .row{padding:14px 16px} .aititle{font-size:16px;font-weight:600} .aisub{font-size:13px;color:#7c8390;margin-top:4px}
+.aichat{display:flex;flex-direction:column;height:100%;background:#fff} .aiMessages{flex:1;overflow:auto;padding:16px} .msg{display:flex;gap:10px;margin-bottom:16px} .msg .dot{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;flex:0 0 auto} .msg.bot .dot{background:#111;color:#fff} .msg.me .dot{background:#f0f2f5} .msg .box{padding:12px 13px;border-radius:18px;line-height:1.48;font-size:15px;white-space:pre-wrap;max-width:100%} .msg.bot .box{background:#f3f5f8} .msg.me{flex-direction:row-reverse} .msg.me .box{background:#e9f2ff}
+.aiComposer{padding:12px 16px 20px;display:flex;gap:10px;border-top:1px solid #eef2f5} .aiComposer input{flex:1;border:1px solid #e5e8ee;border-radius:24px;padding:12px 14px} .send{padding:0 14px;border-radius:18px;background:#111;color:#fff}
+.instaHeader{padding:14px 16px;border-bottom:1px solid #edf1f5;background:#fff} .profileCard{display:flex;align-items:center;gap:12px} .profileStats{display:flex;gap:18px;margin-left:auto;font-size:13px;text-align:center} .profileStats b{display:block;font-size:17px} .bio{margin-top:12px;font-size:14px;line-height:1.45}
+.storyBar{display:flex;gap:14px;padding:14px 16px;border-bottom:1px solid #edf1f5;overflow:auto;background:#fff} .story{min-width:72px;text-align:center;font-size:12px;color:#4c5563} .ring{width:62px;height:62px;padding:2px;border-radius:50%;background:linear-gradient(135deg,#ffd85e,#ff3d77,#7a47ff);margin:0 auto 6px} .ring>div{width:100%;height:100%;border-radius:50%;padding:2px;background:#fff} .ring img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.instaGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#fff} .instaGrid img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.xheader{padding:16px;border-bottom:1px solid #edf1f5;background:#fff} .searchbar{padding:12px 14px;border-radius:999px;background:#eff3f7;color:#6f7887} .trends .row{align-items:flex-start} .tweet{padding:16px;border-bottom:1px solid #edf1f5;background:#fff} .tweet .user{font-weight:700} .tweet .handle{font-weight:400;color:#6d7480} .tweet .body{margin-top:8px;line-height:1.48;font-size:15px} .tweet .meta{margin-top:10px;font-size:13px;color:#6d7480}
+.wvapp{background:#fff;display:flex;flex-direction:column;height:100%} .wvTop{background:#fff;border-bottom:1px solid #edf1f5} .wvToolbar{height:50px;display:flex;align-items:center;padding:0 14px;gap:12px} .wvToolbar .brand{font-size:20px;font-weight:700;display:flex;align-items:center;gap:8px} .wvToolbar .wlogo{width:22px;height:22px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-weight:700}
+.wvHero{position:relative;padding:20px;background:linear-gradient(135deg,#202326,#101114);color:#fff;overflow:hidden} .wvHero .bglogo{position:absolute;right:24px;top:22px;width:160px;opacity:.18} .wvHero h2{font-size:52px;line-height:1;margin:18px 0 12px} .wvHero .sub{opacity:.86;font-size:14px} .membership{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16)} .membership .shield{width:18px;height:18px;border-radius:50%;background:#775df3;display:grid;place-items:center;color:#fff;font-size:12px}
+.wvTabs{display:flex;gap:18px;overflow:auto;padding:0 16px;height:58px;align-items:flex-end} .wvTabs button{height:58px;font-weight:600;color:#495060;border-bottom:3px solid transparent;flex:0 0 auto} .wvTabs button.active{color:#111;border-bottom-color:#4f46e5}
+.wvFeed{padding-bottom:28px;overflow:auto} .wvCard{background:#fff;border-bottom:10px solid #f2f4f8;padding:16px} .wvCard .wvMeta{display:flex;gap:10px;align-items:center;margin-bottom:12px} .wvCard .miniava{width:42px;height:42px;border-radius:50%;overflow:hidden;background:#88b4ea} .wvCard .miniava img{width:100%;height:100%;object-fit:cover} .wvCard .metaTop{font-weight:700} .wvCard .metaSub{font-size:13px;color:#6d7480} .wvCard .caption{font-size:22px;font-weight:650;margin:6px 0 14px} .wvCard .screenShot{border-radius:22px;overflow:hidden;border:1px solid #edf1f5}
+.livecard{display:flex;gap:12px;padding:16px;border-bottom:1px solid #edf1f5;align-items:flex-start} .livecard .thumb{width:148px;border-radius:16px;overflow:hidden;flex:0 0 auto} .livecard .title{font-size:18px;font-weight:700;line-height:1.35} .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 8px;background:#eef2ff;color:#4f46e5;border-radius:999px;margin-top:8px}
+.musicHero{padding:18px 16px;background:linear-gradient(180deg,#ff7da4,#ff4b79);color:#fff} .playlistHead{display:flex;gap:16px;align-items:flex-end} .playlistArt{width:138px;height:138px;border-radius:18px;overflow:hidden;box-shadow:0 16px 28px rgba(0,0,0,.22)} .playlistArt img{width:100%;height:100%;object-fit:cover} .playlistTitle{font-size:28px;font-weight:800;line-height:1.1} .playlistMeta{font-size:13px;opacity:.88;margin-top:8px;line-height:1.45}
+.playactions{display:flex;gap:10px;padding:14px 16px;background:#fff;position:sticky;top:0;z-index:3;border-bottom:1px solid #edf1f5} .playbtn{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#ff375f;color:#fff;font-size:20px} .shuffle{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#f2f5f9;color:#111}
+.track{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid #edf1f5;align-items:center;background:#fff} .track .cov{width:54px;height:54px;border-radius:12px;overflow:hidden;flex:0 0 auto} .track .cov img{width:100%;height:100%;object-fit:cover} .track .tt{font-size:16px;font-weight:600} .track .ta{font-size:13px;color:#6d7480;margin-top:3px}
+.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:84px;background:rgba(17,18,22,.86);color:#fff;padding:11px 14px;border-radius:18px;font-size:13px;z-index:60;box-shadow:0 10px 24px rgba(0,0,0,.24)}
+.hidden{display:none !important}
+
+.pinScreen{height:100%;padding:125px 32px 70px;color:#fff;display:flex;align-items:center;flex-direction:column;background:linear-gradient(160deg,#829cb4,#c7bac2 60%,#8293b1)}
+.pinTitle{font-size:22px;font-weight:600;margin-bottom:24px}.pinDots{display:flex;gap:18px;margin-bottom:20px}.pinDots span{width:14px;height:14px;border:2px solid #fff;border-radius:50%}.pinDots .filled{background:#fff}.pinError{height:24px;font-size:13px}.pinGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 28px;margin-top:15px}.pinGrid button{height:69px;width:69px;border-radius:50%;background:#ffffff45;color:#fff;font-size:29px}.pinGrid button:active{background:#ffffff90}.pinCancel{margin-top:auto;color:#fff;font-size:16px}
+.safariHistory{background:#f8f9fc;padding:25px 18px}.safariSearch{background:#e8ebf1;border-radius:12px;padding:13px;color:#8a909c}.safariHistory h2{font-size:22px;margin:32px 0 10px}.historyRow{display:flex;align-items:center;gap:13px;padding:18px 3px;border-bottom:1px solid #e3e5eb;font-size:16px}.historyIcon{color:#8a929d}.historyArrow{margin-left:auto;color:#8a929d}
+.notesList{background:#fff7d7;padding:20px}.notesList h2{font-size:30px}.noteRow{width:100%;text-align:left;display:flex;flex-direction:column;gap:7px;background:#fff;border-radius:15px;padding:19px;margin:10px 0;box-shadow:0 3px 15px #665e3210}.noteRow b{font-size:18px}.noteRow small{color:#888}
+.notesDetail{height:100%;background:#fff;display:flex;flex-direction:column}.notesToolbar{padding:68px 18px 15px;display:flex;justify-content:space-between;color:#c6a525;font-size:18px}.notesScroll{overflow:auto;flex:1;padding:12px 20px}.notesScroll h1{font-size:24px;margin:10px 0 25px}.diaryPage{width:100%;height:auto;margin-bottom:14px;border-radius:3px}.notesBottom{padding:18px 20px 35px;display:flex;justify-content:space-around;color:#c6a525;font-size:23px;border-top:1px solid #eee}
+
+/* iOS 26 inspired interaction layer — v4 */
+:root{--system-blue:#007aff;--system-yellow:#c6a328}
+.device{border:6px solid #17171b;background:linear-gradient(160deg,#819caf 0%,#d9c6c7 55%,#8496b6 100%)}
+.app{position:relative;height:100%;padding-top:54px;display:flex;flex-direction:column;overflow:hidden;background:#f8f8fa}
+.app>.topnav{flex:0 0 56px;min-height:56px;max-height:56px}
+.app>.content{flex:1 1 auto;height:auto;min-height:0;overflow-y:auto;padding-bottom:32px}
+.topnav{background:rgba(250,250,252,.83);border-bottom:1px solid #ededf1;padding-inline:15px;gap:4px;z-index:4}
+.topnav h1{font-weight:650;letter-spacing:-.4px;flex:1;text-align:center;white-space:nowrap;font-size:17px}
+.topnav .back{font-size:16px;color:var(--system-blue);min-width:67px;text-align:left}
+.topnav .close{width:32px;height:32px;display:grid;place-items:center;color:#222;border-radius:100%;background:#e9ebef;font-size:21px}
+.status.appstatus{color:#14161b;text-shadow:none}
+.island{z-index:26}
+.appbtn{font-size:11px;font-weight:500;color:#20222b;letter-spacing:-.1px}
+.appicon{width:59px;height:59px;border-radius:16px;box-shadow:0 3px 9px #15192724,0 1px 2px #ffffff7a;transition:transform .22s cubic-bezier(.2,.7,.15,1)}
+.appbtn:active .appicon{transform:scale(.9)}
+.home{padding-top:75px; padding-bottom:86px}
+.grid{gap:17px 5px}
+.dock{background:linear-gradient(140deg,#ffffffa4,#eff2f79a);border-color:#fff8;box-shadow:0 5px 32px #2b33412b;padding:10px 8px;margin-top:18px;border-radius:28px}
+.dock .appicon{width:57px;height:57px}
+.glass{backdrop-filter:blur(30px) saturate(155%);-webkit-backdrop-filter:blur(30px) saturate(155%);border-color:#ffffff7d}
+.widget{border-radius:24px}
+.homebar{cursor:pointer}
+.homebar:after{content:'';position:absolute;inset:-14px -20px}
+.pinScreen{height:100%;padding-top:109px}
+.chatview{height:100%;min-height:0}
+.chatinput{padding-bottom:36px}
+.chatheader{flex:0 0 54px}
+.chatview .messages{min-height:0}
+.aichat{height:calc(100% - 56px);min-height:0;flex:1}
+.aiMessages{min-height:0}
+.aiComposer{padding-bottom:40px;background:#fff}
+.aiComposer input{min-width:0}
+.msg.bot .dot{font-size:20px}
+.msg.bot .box{background:transparent;padding:7px 0 0 0}
+.msg.me .box{background:#f3f3f3}
+.notesDetail{height:100%;display:flex;flex-direction:column;min-height:0;background:#fff}
+.notesScroll{flex:1;min-height:0;overflow-y:auto}
+.notesToolbar{flex:0 0 52px}
+.notesBottom{flex:0 0 60px}
+.safariHistory{background:#f7f8fb;padding:18px 18px 45px!important}
+.safariSearch{border-radius:18px!important;background:#ededf3!important}
+.wvapp{padding-top:54px;overflow:hidden}
+.wvFeed{flex:1;min-height:0;overflow-y:auto}
+.wvHero{min-height:197px}
+.wvHero h2{font-size:43px}
+.wvTabs{flex-shrink:0}
+.playlistTitle{white-space:pre-line}
+.musicHero{background:linear-gradient(165deg,#d2a4b7,#e8d7dc 90%);color:#24212b}
+.musicHero .playlistMeta{color:#55515d}
+.playactions{align-items:center}
+.track .tt{font-size:15px}
+.track{min-height:75px}
+.photoViewer{z-index:22}
+.photoViewer .stage{min-height:0}
+@media(min-width:641px){.device{height:min(844px,calc(100dvh - 44px));aspect-ratio:390/844;width:auto}}
+@media(max-width:640px){.device{border:0}.status{padding-top:max(15px,env(safe-area-inset-top))}.homebar{bottom:max(9px,env(safe-area-inset-bottom))}}
+@media(max-height:690px){.widgets .widget{min-height:96px}.home{padding-top:65px}.appicon{width:49px;height:49px}.dock .appicon{width:49px;height:49px}.grid{gap:9px 5px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="stage"><div class="device wallpaper"><div class="island"></div><div class="status"><div>9:41</div><div class="sys"><span>●●●●</span><span>5G</span><span>🔋</span></div></div><div id="screen" class="screen"></div></div></div>
+<script>
+const PHOTOS=['001.jpg', '002.jpg', '003.jpg', '004.jpg', '005.jpg', '006.jpg', '007.jpg', '008.jpg', '009.jpg', '010.jpg', '011.jpg', '012.jpg', '013.jpg', 'weverse_1-297390107.jpg', 'weverse_1-298105017.jpg', 'weverse_1-298105018.jpg', 'weverse_3-336639365.jpg', 'weverse_3-339099838.jpg', 'weverse_4-328094447.jpg'];
+const ICONS={ phone:'assets/icons/ios26_phone.png', kakao:'assets/icons/icon_kakao.png', photos:'assets/icons/icon_photos.svg', ai:'assets/icons/icon_chatgpt.png', instagram:'assets/icons/icon_instagram.png', x:'assets/icons/ios26_x.png', weverse:'assets/icons/icon_weverse.png', music:'assets/icons/ios26_music.png', calendar:'assets/icons/ios26_calendar.png', notes:'assets/icons/ios26_notes.png', safari:'assets/icons/ios26_safari.png', camera:'assets/icons/ios26_camera.png', settings:'assets/icons/icon_settings.svg', messages:'assets/icons/ios26_messages.png' };
+const state={view:'lock', pin:'', app:null, detail:null, photoIndex:null, weverseTab:'artist', xTab:'search', oldChat:false, aiThread:null, toast:null};
+const calls=[
+  ['신신신정환','오늘 오전 9:18','부재중'],['엄마','어제 오후 8:42','발신'],['누나','어제 오후 6:03','수신'],['010-3114-1106','어제 오후 4:17','부재중'],['누나','그제 오후 11:20','수신'],['엄마','그제 오후 7:55','발신'],['신신신정환','그제 오후 2:34','수신'],['070-3827-1003','10월 16일','부재중']
+];
+const kakaoRooms=[
+  {name:'신신신정환', preview:'수업 끝나고 연락해 ㅋㅋ', time:'오전 9:20', badge:1, avatar:'assets/photos/009.jpg'},
+  {name:'누나', preview:'너 내 충전기 가져갔지', time:'어제', badge:0, avatar:'assets/photos/012.jpg'},
+  {name:'엄마', preview:'저녁 먹고 들어와', time:'어제', badge:0, avatar:'assets/photos/013.jpg'},
+  {name:'무용과 동기들', preview:'내일 연습실 3시 맞지?', time:'월요일', badge:0, avatar:'assets/photos/004.jpg'},
+];
+const kakaoCurrent=[
+['day','오늘'],['other','지훈아 수업 끝났냐'],['me','아직\n왜'],['other','왜긴\n그냥 보고싶어서'],['me','개수작 부리지마셈'],['other','?'],['other','아니 진짜로'],['me','...'],['other','수업 끝나고 연락해 ㅋㅋ'],['me','네네']
+];
+const kakaoPast=[['day','1교시 듣던 날'],['other','읽씹?'],['other','야 한지훈 자냐? 일어나라'],['other','보이스톡 해요'],['me','미쳤어요???'],['other','형한테 미쳤냐니...'],['me','저 수업중이라고요'],['other','전화 못 받아 그럼?'],['me','...형 학교 안 다녔어요?'],['other','대학은 안 갔지\n무시하냐?'],['me','아 에바\n뭔 또 무시예요..']];
+const aiThreads=[
+{title:'질투하는 게 이상한 거야?',sub:'친도랑 제일 최근에 한 대화',messages:[['me','친도야'],['bot','왜 지훈아 ㅋㅋ'],['me','상대가 다른 사람이랑 자꾸 엮이는데 신경쓰이면 어떡함'],['bot','그 사람이 진짜 뭘 한 건 아니고, 주변에서 자꾸 엮는 거면 더 애매하지. 머리로는 이해해도 기분은 별개일 수 있어.'],['me','걔 잘못은 아닌데\n짜증남'],['bot','그건 질투가 이상한 게 아니라 네가 그 관계를 진지하게 생각하고 있다는 뜻일 수도 있어.'],['me','말하면 찌질해보일까'],['bot','꼭 전부 말할 필요는 없어.\n"나 좀 서운했어" 정도만 말해도 충분해. 네가 뭘 서운해하는지 상대는 알아야 풀 수 있으니까.']]},
+{title:'남자친구가 너무 바쁠 때',sub:'답답한데 이해도 돼서 더 싫음',messages:[['me','친도 바쁜 사람이랑 연애하면 원래 이렇게 연락을 못해?'],['bot','직업이나 일정에 따라 그럴 수 있어. 근데 연락 빈도보다 중요한 건 둘이 납득 가능한 방식이 있느냐야.'],['me','얘는 진짜 바쁨\n내가 이해해야 되는 건 알겠는데'],['bot','이해해주는 거랑 네가 서운하지 않아야 하는 건 다른 얘기야. 어떤 순간이 제일 서운한지 먼저 정리해볼래?'],['me','그냥 나 혼자 기다리는 느낌'],['bot','그럼 그걸 그대로 말해보자. 비난이 아니라 설명으로.']]},
+{title:'남자가 남자를 좋아할 수도 있나',sub:'초반의 너무 솔직한 검색',messages:[['me','친도'],['bot','응 왔어.'],['me','남자가 남자 좋아할수도 있냐'],['bot','물론이지. 성별과 상관없이 누군가에게 끌리거나 사랑하는 감정은 충분히 자연스러운 일이야.'],['me','아오'],['bot','놀랄 수는 있어도 이상한 건 아니야 지훈아 ㅋㅋ']]},
+{title:'먼저 연락하면 지는거냐',sub:'자존심과 후회 사이',messages:[['me','친도'],['bot','응 왜'],['me','먼저 연락하면 지는거냐'],['bot','연애가 가위바위보도 아니고 ㅋㅋ\n정말 연락하고 싶은데 자존심 때문에 참는 중이야?'],['me','아니 그냥'],['bot','그냥이라고 쓰는 사람 치고 그냥인 사람 별로 없더라. 하고 싶으면 해.']]},
+];
+const instaPosts=['009.jpg','001.jpg','002.jpg','003.jpg','010.jpg','011.jpg','012.jpg','013.jpg','004.jpg'];
+const xTweets={
+ search:[
+  ['실트','신유 열애설','지훈이 예전에 찾아봤던 검색어 흔적'],
+  ['실트','신유 성지유','찌라시 카드뉴스 때문에 더 마음 상했던 날'],
+  ['실트','신유 핑크머리','컴백날 반응은 이것뿐이라 더 짜증났음']
+ ],
+ scandal:[
+  ['@peachsoda_','신유 열애설 또 뭐야;;; 사진 각도 너무 애매함','10.03 · 21 ♥ 98'],
+  ['@1sec_fan','난 그냥 회사 공지 나올 때까지 가만히 있을래', '10.03 · 8 ♥ 54'],
+  ['@mylittleshy','근데 카드뉴스 진짜 억지 같은데...','10.03 · 16 ♥ 77'],
+  ['@jellybear','숙소 앞 사진이 제일 찜찜하긴 함','10.03 · 12 ♥ 45']
+ ]
+};
+const playlist=[
+  ['imase','18','assets/music/18.svg'],
+  ['실리카겔 · So!YoOn!','Tic Tak Tok','assets/music/tic_tak_tok.svg'],
+  ['1SECOND','One More Second','assets/music/one_more_second.svg'],
+  ['Liana Flores','recently','assets/music/recently.svg'],
+  ['Fujii Kaze','You','assets/music/you.svg'],
+  ['도시고독','비디오 환각','assets/music/video_hallucination.svg'],
+  ['Billie Eilish','I love you','assets/music/i_love_you.svg'],
+  ['TWS','Fire Escape','assets/music/fire_escape.svg']
+];
+function q(sel){return document.querySelector(sel)}
+function showToast(msg){state.toast=msg; render(); if(msg) setTimeout(()=>{if(state.toast===msg){state.toast=null; render();}},2800);}
+function openApp(id){state.view='app'; state.app=id; state.detail=null; state.photoIndex=null; if(id==='weverse') state.weverseTab='artist'; if(id==='x') state.xTab='search'; render();}
+function goHome(){state.view='home'; state.app=null; state.detail=null; state.photoIndex=null; render();}
+function openChat(name){state.detail=name; render();}
+function openPhoto(i){state.photoIndex=i; render();}
+function openAIThread(i){state.aiThread=i; render();}
+function switchWeverse(tab){state.weverseTab=tab; render();}
+function switchX(tab){state.xTab=tab; render();}
+function contactDetail(i){state.detail='call'+i; render();}
+function lockHTML(){return `<div class="lock"><div class="date">10월 22일 목요일</div><div class="time">9:41</div><div class="notice glass"><img src="${ICONS.kakao}" alt="kakao"><div><div class="meta">신신신정환 · 지금</div><div style="font-weight:700;margin-bottom:4px">지훈아 수업 끝났냐</div><div style="font-size:14px;color:#4d5663">오늘은 읽씹하지 마셈 ㅋㅋ</div></div></div><button class="unlocktip" style="color:inherit;background:transparent" onclick="beginUnlock()">위로 쓸어올려 잠금 해제  ⌃</button><div class="actions"><button class="circlebtn">🔦</button><button class="circlebtn">📷</button></div></div><div class="homebar light"></div>`}
+function beginUnlock(){state.view='passcode';state.pin='';state.toast=null;render();}
+function pressPin(n){if(state.pin.length>=4)return;state.pin+=String(n);if(state.pin.length===4){if(state.pin==='1107'){state.view='home';state.pin='';state.toast=null;render();}else{state.pin='';render();const e=q('.pinError');if(e)e.textContent='암호가 올바르지 않습니다';}}else render();}
+function pinHTML(){return `<div class="pinScreen"><div class="pinTitle">암호 입력</div><div class="pinDots">${[0,1,2,3].map(i=>`<span class="${state.pin.length>i?'filled':''}"></span>`).join('')}</div><div class="pinError"></div><div class="pinGrid">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(n=>n===''?'<span></span>':`<button onclick="${n==='⌫'?"state.pin=state.pin.slice(0,-1);render()":`pressPin(${n})`}">${n}</button>`).join('')}</div><button class="pinCancel" onclick="state.view='lock';render()">취소</button></div><div class="homebar light"></div>`;}
+function safariHTML(){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>Safari</h1><button class="close" onclick="goHome()">×</button></div><div class="content safariHistory"><div class="safariSearch">⌕ 검색 또는 웹 사이트 이름 입력</div><h2>최근 검색 기록</h2>${['원세컨드 신유','신정환','성지유'].map((x,i)=>`<div class="historyRow"><span class="historyIcon">◷</span><span>${i+1}. ${x}</span><span class="historyArrow">↗</span></div>`).join('')}</div>`);}
+const diaryEntries=[{title:'다섯 번째 일기',pages:['assets/diary1.jpg']},{title:'일곱 번째 일기 : 옛날 이야기',pages:['assets/diary2.jpg','assets/diary3.jpg']},{title:'여섯 번째 일기',pages:['assets/diary4.jpg']}];
+function notesHTML(){if(state.detail!==null){const d=diaryEntries[state.detail];return shell(`<div class="notesDetail"><div class="notesToolbar"><button onclick="state.detail=null;render()">‹ 메모</button><span>↶　↷　♧　···</span></div><div class="notesScroll"><h1>${d.title}</h1>${d.pages.map((src,i)=>`<img class="diaryPage" src="${src}" alt="${d.title} ${i+1}페이지 원문">`).join('')}</div><div class="notesBottom">☷　　　　▣　　　　◉　　　　□</div></div>`);}return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>메모</h1><button class="close" onclick="goHome()">×</button></div><div class="content notesList"><h2>모든 메모</h2>${diaryEntries.map((d,i)=>`<button class="noteRow" onclick="state.detail=${i};render()"><b>${d.title}</b><small>일기 · ${d.pages.length}페이지</small></button>`).join('')}</div>`);}
+function appButton(id,label,badge=''){return `<button class="appbtn" onclick="openApp('${id}')"><div class="appicon"><img src="${ICONS[id]}" alt=""></div><div style="position:relative">${label}${badge?`<span class="badge">${badge}</span>`:''}</div></button>`;}
+function homeHTML(){return `<div class="home"><div class="widgets"><div class="widget glass"><div class="tiny">오늘 일정</div><div class="big">3</div><div class="sub">전공 수업 · 연습 · 저녁 약속</div></div><div class="widget glass"><div class="tiny">최근 재생</div><div style="font-size:18px;font-weight:700">One More Second</div><div class="sub">1SECOND · 애플뮤직 플레이리스트</div></div></div><div class="grid">${appButton('kakao','카카오톡','1')}${appButton('photos','사진')}${appButton('ai','ChatGPT')}${appButton('instagram','Instagram')}${appButton('x','X')}${appButton('weverse','Weverse')}${appButton('music','음악')}${appButton('calendar','캘린더')}</div><div class="pages"><span></span><span></span></div><div class="dock glass">${appButton('phone','전화')}${appButton('safari','Safari')}${appButton('notes','메모')}${appButton('camera','카메라')}</div></div><div class="homebar"></div>`;}
+function shell(inner, light=false){return `<div class="app">${inner}</div><div class="homebar ${light?'light':''}" onclick="goHome()"></div>`}
+function phoneHTML(){ if(typeof state.detail==='string' && state.detail.startsWith('call')){ const i=Number(state.detail.slice(4)); const c=calls[i]; const isJh = c[0]==='신신신정환'; return shell(`<div class="topnav"><button class="back" onclick="state.detail=null;render()">‹ 최근 통화</button><h1>연락처</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="profilehero"><div class="avatar"><img src="${isJh?'assets/photos/009.jpg':'assets/photos/012.jpg'}"></div><div class="name">${c[0]}</div><div class="phoneNo">번호 비공개</div><div class="contactchips"><div class="chip">영상통화</div><div class="chip">메시지</div><div class="chip">공유</div></div></div><div class="sectiontitle">메모</div><div class="list"><div class="row"><div><div class="title">관계</div><div class="meta">${isJh?'저장명 바뀐 흔적 있음 · 원래는 신정환':'가족'} </div></div></div><div class="row"><div><div class="title">이스터 에그</div><div class="meta">${isJh?'말하지 않아도 다 아는 사람':'늘 저녁 챙겨먹으라고 하는 사람'} </div></div></div></div></div>`,false)} return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>전화</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="seg"><button class="active">최근 통화</button><button>부재중</button></div><div class="list">${calls.map((c,i)=>`<button class="row" onclick="contactDetail(${i})"><div><div class="title">${c[0]}</div><div class="meta">${c[2]}</div></div><div class="meta">${c[1]}</div></button>`).join('')}</div></div>`)}
+function kakaoHTML(){ if(state.detail==='신신신정환'){ const msgs=(state.oldChat?kakaoPast:kakaoCurrent); return shell(`<div class="chatview"><div class="chatheader"><button class="back" onclick="state.detail=null;render()" style="color:#0a84ff;font-size:18px">‹</button><div class="avatar"><img src="assets/photos/009.jpg"></div><div style="font-weight:700">신신신정환</div><div style="margin-left:auto"><button onclick="state.oldChat=!state.oldChat;render()" style="font-size:13px;color:#0a84ff">${state.oldChat?'현재 대화 보기':'과거 대화 보기'}</button></div></div><div class="messages">${msgs.map(m=>m[0]==='day'?`<div class="daymark">${m[1]}</div>`:`<div class="bubble ${m[0]==='me'?'me':'other'}">${m[1]}</div>`).join('')}</div><div class="chatinput"><div class="field">메시지 보내기</div></div></div>`,false)} return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>카카오톡</h1><button class="close" onclick="goHome()">×</button></div><div class="content chatlist">${kakaoRooms.map(r=>`<button class="row" onclick="openChat('${r.name}')"><div style="display:flex;align-items:center;min-width:0;flex:1"><div class="thumb"><img src="${r.avatar}"></div><div class="txt"><div class="name">${r.name}</div><div class="preview">${r.preview}</div></div></div><div class="right"><div>${r.time}</div>${r.badge?`<div class="badge" style="position:static;margin-left:auto;margin-top:7px;width:max-content">${r.badge}</div>`:''}</div></button>`).join('')}</div>`)}
+function photosHTML(){ if(state.photoIndex!==null){ const fn=PHOTOS[state.photoIndex]; const cap = fn.includes('weverse')?'위버스에 올라온 사진 저장본':'최근 항목'; return `<div class="photoViewer"><div class="viewerTop"><button class="back" onclick="state.photoIndex=null;render()" style="color:#fff">완료</button><div>${state.photoIndex+1} / ${PHOTOS.length}</div><div></div></div><div class="stage"><img src="assets/photos/${fn}"></div><div class="cap">${cap}${fn==='010.jpg'?' · 이전에 삭제했다가 다시 복구한 사진':''}</div><div class="homebar light" onclick="goHome()"></div></div>`; } return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>사진</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="seg"><button class="active">최근 항목</button><button>즐겨찾기</button><button>최근 삭제된 항목</button></div><div class="photogrid">${PHOTOS.map((p,i)=>`<button onclick="openPhoto(${i})"><img src="assets/photos/${p}"></button>`).join('')}</div></div>`)}
+function aiHTML(){ if(state.aiThread!==null){ const t=aiThreads[state.aiThread]; return shell(`<div class="topnav"><button class="back" onclick="state.aiThread=null;render()">‹ 챗 목록</button><h1>친도</h1><button class="close" onclick="goHome()">×</button></div><div class="aichat"><div class="aiMessages">${t.messages.map(m=>`<div class="msg ${m[0]}"><div class="dot">${m[0]==='bot'?'◎':'🙂'}</div><div class="box">${m[1]}</div></div>`).join('')}</div><div class="aiComposer"><input placeholder="미리 작성된 상담 기록" readonly aria-label="시뮬레이션 대화"/><button class="send" onclick="showToast('이번 버전은 미리 작성된 친도 대화로 구성했어.')">↑</button></div></div>`) } return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>ChatGPT</h1><button class="close" onclick="goHome()">×</button></div><div class="content aithreads">${aiThreads.map((t,i)=>`<button class="row" onclick="openAIThread(${i})"><div><div class="aititle">${t.title}</div><div class="aisub">${t.sub}</div></div><div class="meta">›</div></button>`).join('')}</div>`)}
+function instagramHTML(){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>Instagram</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="instaHeader"><div class="profileCard"><div class="avatar" style="width:82px;height:82px"><img src="assets/photos/003.jpg"></div><div><div style="font-size:22px;font-weight:700">jihoon.h</div><div style="font-size:13px;color:#7a8290">한지훈</div></div><div class="profileStats"><div><b>12</b>게시물</div><div><b>187</b>팔로워</div><div><b>142</b>팔로잉</div></div></div><div class="bio"><b>무용 / 그냥 사는 중</b><br>연습실, 학교, 가끔 반려견.<br><span style="color:#0a84ff">팔로잉에서 지후 선배는 사라짐.</span></div></div><div class="storyBar"><div class="story"><div class="ring"><div><img src="assets/photos/011.jpg"></div></div>연습</div><div class="story"><div class="ring"><div><img src="assets/photos/012.jpg"></div></div>두리</div><div class="story"><div class="ring"><div><img src="assets/photos/013.jpg"></div></div>초코</div><div class="story"><div class="ring"><div><img src="assets/photos/009.jpg"></div></div>아카이브</div></div><div class="instaGrid">${instaPosts.map(p=>`<img src="assets/photos/${p}">`).join('')}</div></div>`)}
+function xHTML(){ let inner=''; if(state.xTab==='search'){ inner = `<div class="trends">${xTweets.search.map(t=>`<div class="row"><div><div class="title">${t[1]}</div><div class="meta">${t[2]}</div></div><button style="color:#0a84ff" onclick="switchX('scandal')">보기</button></div>`).join('')}</div>`; } else { inner = xTweets.scandal.map(t=>`<div class="tweet"><div class="user">${t[0]} <span class="handle">· 팬 계정</span></div><div class="body">${t[1]}</div><div class="meta">${t[2]}</div></div>`).join('') } return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>X</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="xheader"><div class="searchbar">🔎  신유 열애설</div></div><div class="seg"><button class="${state.xTab==='search'?'active':''}" onclick="switchX('search')">검색 기록</button><button class="${state.xTab==='scandal'?'active':''}" onclick="switchX('scandal')">팬 반응</button></div>${inner}</div>`)}
+function weverseHTML(){ let feed=''; if(state.weverseTab==='artist'){ feed = `
+ <div class="wvCard"><div class="wvMeta"><div class="miniava"><img src="assets/photos/009.jpg"></div><div><div class="metaTop">귀염둥이 딸기 오빠 🍓</div><div class="metaSub">10.16. 17:13</div></div></div><div class="caption">금요일 파이팅!</div><div class="screenShot"><img src="assets/weverse/post1.png"></div></div>
+ <div class="wvCard"><div class="wvMeta"><div class="miniava"><img src="assets/photos/001.jpg"></div><div><div class="metaTop">귀염둥이 딸기 오빠 🍓</div><div class="metaSub">09.02. 14:06</div></div></div><div class="caption">OOTD</div><div class="screenShot"><img src="assets/weverse/post2.png"></div></div>
+ <div class="wvCard"><div class="wvMeta"><div class="miniava"><img src="assets/photos/002.jpg"></div><div><div class="metaTop">귀염둥이 딸기 오빠 🍓</div><div class="metaSub">10.17. 22:24</div></div></div><div class="caption">첫만남 신유</div><div class="screenShot"><img src="assets/weverse/post3.png"></div></div>
+ <div class="wvCard"><div class="wvMeta"><div class="miniava"><img src="assets/photos/003.jpg"></div><div><div class="metaTop">귀염둥이 딸기 오빠 🍓</div><div class="metaSub">09.23. 22:57</div></div></div><div class="caption">즐거운 추석을 보내세용</div><div class="screenShot"><img src="assets/weverse/post4.png"></div></div>`; } else if(state.weverseTab==='live'){ feed = `<a class="livecard" href="https://weverse.io/tws/live/2-180502498?hl=ko" target="_blank" rel="noreferrer"><div class="thumb"><img src="assets/weverse/live_thumb.png"></div><div><div class="title">제철 신(유) 🦐</div><div class="metaSub" style="margin-top:8px">09.24. 14:09 · 재생 278K · 채팅 66.6K</div><div class="pill">LIVE 링크 열기 ↗</div><div style="margin-top:10px;font-size:14px;line-height:1.45;color:#4c5563">썸네일을 누르면 실제 위버스 라이브 페이지로 이동해.</div></div></a>`; } else { feed = `<div style="padding:26px 18px;color:#65707f">${state.weverseTab} 탭은 다음 버전에서 더 채울 예정이야.</div>`; } return `<div class="wvapp"><div class="wvTop"><div class="wvToolbar"><div style="font-size:24px">☰</div><div class="brand"><span class="wlogo">w</span> 1SECOND</div><div style="margin-left:auto;display:flex;gap:14px;align-items:center"><div class="avatar" style="width:32px;height:32px;border-radius:50%"><img src="assets/photos/003.jpg"></div><div style="position:relative">🔔<span style="position:absolute;top:-8px;right:-12px;background:#ff5a5f;color:#fff;border-radius:999px;font-size:10px;padding:2px 4px">99+</span></div><div>✈️</div></div></div><div class="wvHero"><img class="bglogo" src="assets/one_second_logo.svg" alt="1SECOND"><div class="sub">4.2만 members · ✓ 가입 완료</div><h2>1SECOND</h2><div class="membership"><span class="shield">♡</span> Membership</div></div><div class="wvTabs"><button class="${state.weverseTab==='highlight'?'active':''}" onclick="switchWeverse('highlight')">Highlight</button><button class="${state.weverseTab==='fan'?'active':''}" onclick="switchWeverse('fan')">Fan</button><button class="${state.weverseTab==='artist'?'active':''}" onclick="switchWeverse('artist')">Artist</button><button class="${state.weverseTab==='fanletter'?'active':''}" onclick="switchWeverse('fanletter')">Fan Letter</button><button class="${state.weverseTab==='media'?'active':''}" onclick="switchWeverse('media')">Media</button><button class="${state.weverseTab==='live'?'active':''}" onclick="switchWeverse('live')">LIVE</button><button class="${state.weverseTab==='notice'?'active':''}" onclick="switchWeverse('notice')">Notice</button><button class="${state.weverseTab==='shop'?'active':''}" onclick="switchWeverse('shop')">Shop</button></div></div><div class="wvFeed">${feed}</div><div class="homebar" onclick="goHome()"></div></div>`}
+function musicHTML(){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>Apple Music</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div class="musicHero"><div class="playlistHead"><div class="playlistArt"><img src="assets/music/one_more_second.svg"></div><div><div class="playlistTitle">읽씹?
+플레이리스트</div><div class="playlistMeta">지훈이 저장한 플레이리스트 · 8곡<br>최근 재생: One More Second</div></div></div></div><div class="playactions"><button class="playbtn">▶</button><button class="shuffle">⇄</button></div>${playlist.map((t,i)=>`<div class="track"><div style="width:20px;text-align:right;color:#7a8290">${i+1}</div><div class="cov"><img src="${t[2]}"></div><div><div class="tt">${t[1]}</div><div class="ta">${t[0]}</div></div></div>`).join('')}</div>`)}
+function simpleApp(title,desc){return shell(`<div class="topnav"><button class="back" onclick="goHome()">‹ 홈</button><h1>${title}</h1><button class="close" onclick="goHome()">×</button></div><div class="content"><div style="padding:28px 18px;color:#616a78;line-height:1.6">${desc}</div></div>`)}
+function appHTML(){ switch(state.app){ case'phone':return phoneHTML(); case'kakao':return kakaoHTML(); case'photos':return photosHTML(); case'ai':return aiHTML(); case'instagram':return instagramHTML(); case'x':return xHTML(); case'weverse':return weverseHTML(); case'music':return musicHTML(); case'safari':return safariHTML(); case'notes':return notesHTML(); case'calendar':return simpleApp('캘린더','팬싸 날짜, 학교 일정, 공연 연습 날짜 같은 작은 흔적을 넣을 예정이야.'); case'camera':return simpleApp('카메라','이번 버전에서는 사진첩을 먼저 구현했어.'); default:return '' } }
+function render(){ const root=q('#screen'); let html=''; if(state.view==='lock') html=lockHTML(); else if(state.view==='passcode') html=pinHTML(); else if(state.view==='home') html=homeHTML(); else html=appHTML(); if(state.toast) html += `<div class="toast">${state.toast}</div>`; root.innerHTML=html; document.querySelector('.status')?.classList.toggle('appstatus',state.view==='app'); }
+let touchStartY=null, appGestureStart=null;
+q('#screen').addEventListener('touchstart',e=>{if(state.view==='lock')touchStartY=e.touches[0].clientY; if(state.view==='app' && e.touches[0].clientY>window.innerHeight-85) appGestureStart=e.touches[0].clientY;},{passive:true});
+q('#screen').addEventListener('touchend',e=>{if(state.view==='lock'&&touchStartY!==null){const dy=touchStartY-e.changedTouches[0].clientY;if(dy>55)beginUnlock();touchStartY=null;} if(state.view==='app' && appGestureStart!==null){ if(appGestureStart-e.changedTouches[0].clientY>65)goHome();appGestureStart=null;}},{passive:true});
+q('#screen').addEventListener('mousedown',e=>{if(state.view==='lock')touchStartY=e.clientY});
+q('#screen').addEventListener('mouseup',e=>{if(state.view==='lock'&&touchStartY!==null){if(touchStartY-e.clientY>45)beginUnlock();touchStartY=null;}});
+q('#screen').addEventListener('click',e=>{if(state.view==='lock'&&e.target.closest('.notice'))beginUnlock();});
+
+render();
+</script>
+</body></html>
